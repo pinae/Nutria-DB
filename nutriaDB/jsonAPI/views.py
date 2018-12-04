@@ -1,6 +1,5 @@
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.db.models import Q
-from django.contrib.auth import logout
 from django.contrib.auth.models import User
 import json
 import re
