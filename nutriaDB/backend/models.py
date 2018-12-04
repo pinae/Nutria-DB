@@ -9,6 +9,13 @@ class Category(models.Model):
         return str(self.name)
 
 
+class Manufacturer(models.Model):
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Food(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -28,6 +35,7 @@ class Product(Food):
         default=100, help_text="Reference amount for this food in g. This is usually 100g.")
     calories = models.FloatField(
         help_text="Number of kcal of the reference amount of this food. This must not be empty.")
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True)
     total_fat = models.FloatField(
         null=True, help_text="Total amount of fat in g in the reference amount.")      # Fett gesamt
     saturated_fat = models.FloatField(
