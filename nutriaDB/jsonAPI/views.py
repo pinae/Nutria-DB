@@ -19,7 +19,7 @@ def query_food(request):
         return query_ean(request)
     elif request.method == 'GET' and 'name' in request.GET:
         query_string = request.GET['name']
-        if 'query_count' in request.GET:
+        if 'count' in request.GET:
             try:
                 query_count = int(request.GET['count'])
             except ValueError:
@@ -27,7 +27,7 @@ def query_food(request):
                                               content_type="application/json")
     elif request.method == 'POST' and 'name' in request.POST:
         query_string = request.POST['name']
-        if 'query_count' in request.POST:
+        if 'count' in request.POST:
             try:
                 query_count = int(request.POST['count'])
             except ValueError:
@@ -57,7 +57,7 @@ def query_ean(request):
         if not re.search("^\d+$", query_ean):
             return HttpResponseBadRequest('{"error": "The ean must contain only digits."}',
                                           content_type="application/json")
-        if 'query_count' in request.GET:
+        if 'count' in request.GET:
             try:
                 query_count = int(request.GET['count'])
             except ValueError:
@@ -68,7 +68,7 @@ def query_ean(request):
         if not re.search("^\d+$", query_ean):
             return HttpResponseBadRequest('{"error": "The ean must contain only digits."}',
                                           content_type="application/json")
-        if 'query_count' in request.POST:
+        if 'count' in request.POST:
             try:
                 query_count = int(request.POST['count'])
             except ValueError:

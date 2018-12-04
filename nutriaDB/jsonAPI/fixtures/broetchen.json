@@ -1,0 +1,236 @@
+[
+  {
+    "model": "auth.user",
+      "pk": 1,
+      "fields": {
+        "username": "user1",
+        "password": "password"
+      }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Mehl"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Backzutat"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 3,
+    "fields": {
+      "name": "Gewürz"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 4,
+    "fields": {
+      "name": "Backware"
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name_addition": "Weizenmehl Type 550",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 352.0,
+      "total_fat": 1.13,
+      "saturated_fat": 0.17,
+      "cholesterol": 0.0,
+      "protein": 10.6,
+      "total_carbs": 72.0,
+      "sugar": 1.08,
+      "dietary_fiber": 3.5,
+      "salt": 0.0,
+      "sodium": 2.0,
+      "potassium": 150.0,
+      "copper": 0.14,
+      "iron": 1.0,
+      "magnesium": 23.0,
+      "manganese": 0.687,
+      "zinc": 0.78,
+      "phosphorous": 107.0,
+      "sulphur": 100.0,
+      "chloro": 50.0,
+      "fluoric": 50.0,
+      "vitamin_b1": 0.11,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.1,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.2
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 2,
+    "fields": {
+      "category": 2,
+      "name_addition": "frische Backhefe",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 328.0,
+      "total_fat": 1.2,
+      "saturated_fat": 0.2,
+      "cholesterol": 0.0,
+      "protein": 35.6,
+      "total_carbs": 32.0,
+      "sugar": 3.84,
+      "dietary_fiber": 21.0,
+      "salt": 0.13,
+      "sodium": 50.0,
+      "potassium": 2000.0,
+      "copper": 5000.0,
+      "iron": 20.0,
+      "magnesium": 230.0,
+      "manganese": 0.53,
+      "zinc": 8.0,
+      "phosphorous": 1290.0,
+      "sulphur": 300.0,
+      "chloro": 350.0,
+      "fluoric": 0.2,
+      "vitamin_b1": 2.33,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 2.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.3
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 3,
+    "fields": {
+      "category": 3,
+      "name_addition": "Speisesalz",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 0.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 0.0,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 98.71,
+      "sodium": 38850.0,
+      "potassium": 4.0,
+      "copper": 0.1,
+      "iron": 0.1,
+      "magnesium": 120.0,
+      "manganese": 0.2,
+      "zinc": 0.05,
+      "phosphorous": 150.0,
+      "sulphur": 23.0,
+      "chloro": 59900,
+      "fluoric": 50.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 4,
+    "fields": {
+      "category": 2,
+      "name_addition": "Biomalz",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 282.0,
+      "total_fat": 1.0,
+      "saturated_fat": 0.18,
+      "cholesterol": 0.0,
+      "protein": 4.0,
+      "total_carbs": 63.0,
+      "sugar": 63.0,
+      "dietary_fiber": 0.5,
+      "salt": 0.0,
+      "sodium": 80.0,
+      "potassium": 230.0,
+      "copper": 0.2,
+      "iron": 8.7,
+      "magnesium": 100.0,
+      "manganese": 1.5,
+      "zinc": 2.0,
+      "phosphorous": 300.0,
+      "sulphur": 110.0,
+      "chloro": 20.0,
+      "fluoric": 0.1,
+      "vitamin_b1": 3.6,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.6,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 1,
+    "fields": {
+      "category": 4,
+      "name_addition": "Weizenbrötchen",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 1,
+    "fields": {
+      "recipe": 1,
+      "product": 1,
+      "amount": 500.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 2,
+    "fields": {
+      "recipe": 1,
+      "product": 2,
+      "amount": 15.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 3,
+    "fields": {
+      "recipe": 1,
+      "product": 3,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 4,
+    "fields": {
+      "recipe": 1,
+      "product": 4,
+      "amount": 3.0
+    }
+  }
+]
