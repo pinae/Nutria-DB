@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.db.models import Q
 from django.contrib.auth.models import User
+from datetime import datetime, timedelta
 import json
 import re
 import jwt
@@ -94,7 +95,14 @@ def save_food(request):
                                       content_type="application/json")
     try:
         token_payload = jwt.decode(request.POST['token'], JWT_SECRET, 'HS256')
-    except jwt.DecodeError:
+    except jwt.InvalidSignatureError:
+        return HttpResponseBadRequest('{"error": "Invalid signature of the authentication token."}',
+                                      content_type="application/json")
+    except jwt.ExpiredSignatureError:
+        return HttpResponseBadRequest('{"error": "This authentication token is expired. ' +
+                                      'Please log in again and get a new token."}',
+                                      content_type="application/json")
+    except jwt.InvalidTokenError:
         return HttpResponseBadRequest('{"error": "Invalid authentication token."}',
                                       content_type="application/json")
     try:
@@ -309,7 +317,7 @@ def log_in(request):
     if not user:
         return HttpResponseBadRequest('{"error": "Invalid credentials."}',
                                       content_type="application/json")
-    payload = {'id': user.id, 'email': user.email}
+    payload = {'id': user.pk, 'email': user.email, 'exp': datetime.utcnow() + timedelta(minutes=30)}
     jwt_token = {'token': jwt.encode(payload, JWT_SECRET, 'HS256')}
     return HttpResponse(json.dumps(jwt_token),
                         content_type="application/json")
@@ -319,19 +327,16 @@ def register(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to register in via POST."}',
                                       content_type="application/json")
-    if 'username' not in request.POST or\
-            'password' not in request.POST or\
-            'first_name' not in request.POST or\
-            'last_name' not in request.POST or\
-            'email' not in request.POST:
+    data = json.loads(request.body)
+    if not all(k in data for k in ['username', 'password', 'first_name', 'last_name', 'email']):
         return HttpResponseBadRequest('{"error": "Please supply a \'username\', a \'password\', ' +
                                       'a \'first_name\', a \'last_name\' and a \'email\'."}',
                                       content_type="application/json")
-    username = request.POST['username']
-    password = request.POST['password']
-    first_name = request.POST['first_name']
-    last_name = request.POST['last_name']
-    email = request.POST['email']
+    username = data['username']
+    password = data['password']
+    first_name = data['first_name']
+    last_name = data['last_name']
+    email = data['email']
     if not re.search("^[a-zA-Z0-9_\-]+$", username):
         HttpResponseBadRequest('{"error": "The username must only contain big and small letters, ' +
                                'digits, underscores and hyphens (^[a-zA-Z0-9_\-]+$)."}',
@@ -354,9 +359,10 @@ def register(request):
                                'digits, umlauts and hyphens ' +
                                '(^[a-zA-Z0-9ÄÖÜäöüß\-\.]+\@[a-zA-Z0-9ÄÖÜäöüß\-\.]+\.[a-zA-Z]+$)."}',
                                content_type="application/json")
-    new_user = User(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+    new_user = User(username=username, email=email, first_name=first_name, last_name=last_name)
+    new_user.set_password(password)
     new_user.save()
-    payload = {'id': new_user.id, 'email': new_user.email}
-    jwt_token = {'token': jwt.encode(payload, JWT_SECRET, 'HS256')}
+    payload = {'id': new_user.pk, 'email': new_user.email, 'exp': datetime.utcnow() + timedelta(minutes=30)}
+    jwt_token = {'token': str(jwt.encode(payload, JWT_SECRET, 'HS256'), encoding='utf-8')}
     return HttpResponse(json.dumps(jwt_token),
                         content_type="application/json")
