@@ -306,19 +306,23 @@ def log_in(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to log in via POST."}',
                                       content_type="application/json")
-    if 'username' not in request.POST or 'password' not in request.POST:
+    data = json.loads(request.body)
+    if 'username' not in data or 'password' not in data:
         return HttpResponseBadRequest('{"error": "Please supply a \'username\' and a \'password\'."}',
                                       content_type="application/json")
     try:
-        user = User.objects.get(username=request.POST['username'], password=request.POST['password'])
+        user = User.objects.get(username=data['username'])
     except User.DoesNotExist:
-        return HttpResponseBadRequest('{"error": "Could not find a user with these credentials."}',
+        return HttpResponseBadRequest('{"error": "Could not find a user with this username."}',
                                       content_type="application/json")
     if not user:
-        return HttpResponseBadRequest('{"error": "Invalid credentials."}',
+        return HttpResponseBadRequest('{"error": "Invalid user."}',
+                                      content_type="application/json")
+    if not user.check_password(data['password']):
+        return HttpResponseBadRequest('{"error": "Wrong password."}',
                                       content_type="application/json")
     payload = {'id': user.pk, 'email': user.email, 'exp': datetime.utcnow() + timedelta(minutes=30)}
-    jwt_token = {'token': jwt.encode(payload, JWT_SECRET, 'HS256')}
+    jwt_token = {'token': str(jwt.encode(payload, JWT_SECRET, 'HS256'), encoding='utf-8')}
     return HttpResponse(json.dumps(jwt_token),
                         content_type="application/json")
 

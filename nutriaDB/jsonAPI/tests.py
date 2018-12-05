@@ -69,3 +69,18 @@ class UserTests(TestCase):
         pl = jwt.decode(rc['token'], JWT_SECRET, 'HS256')
         self.assertIn('id', pl)
         self.assertEqual(pl['email'], "max@mustermann.de")
+
+    def testLogIn(self):
+        u = User(username="maxm", first_name="Max", last_name="Mustermann", email="max@mustermann.de")
+        u.set_password("test1234")
+        u.save()
+        response = self.client.post('/json/login', data=json.dumps({
+            "username": "maxm",
+            "password": "test1234"
+        }), content_type='application/json')
+        rc = json.loads(response.content)
+        self.assertIn('token', rc)
+        pl = jwt.decode(rc['token'], JWT_SECRET, 'HS256')
+        self.assertIn('id', pl)
+        self.assertEqual(u.pk, pl['id'])
+        self.assertEqual(pl['email'], "max@mustermann.de")
