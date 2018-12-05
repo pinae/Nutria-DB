@@ -113,7 +113,7 @@ class SaveTests(TestCase):
         response = self.client.post('/json/save', data=json.dumps({
             "token": token,
             "food": {
-                "name": "Mehl: Type 405",
+                "name": "Mehl: Weizenmehl Type 405",
                 "reference_amount": 100,
                 "calories": 348,
                 "total_fat": 0.98,
@@ -145,8 +145,8 @@ class SaveTests(TestCase):
         }), content_type='application/json')
         self.assertIn('success', json.loads(response.content))
         mehl_cat = Category.objects.get(name="Mehl")
-        p = Product.objects.filter(category=mehl_cat, name_addition="Type 405")[0]
-        self.assertEqual(str(p), "Mehl: Type 405")
+        p = Product.objects.filter(category=mehl_cat, name_addition="Weizenmehl Type 405")[0]
+        self.assertEqual(str(p), "Mehl: Weizenmehl Type 405")
         self.assertAlmostEqual(p.reference_amount, 100, 5)
         self.assertAlmostEqual(p.calories, 348, 5)
         self.assertAlmostEqual(p.total_fat, 0.98, 5)
