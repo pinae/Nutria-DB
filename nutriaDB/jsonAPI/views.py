@@ -90,11 +90,12 @@ def save_food(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to save data via POST."}',
                                       content_type="application/json")
-    if 'token' not in request.POST or 'food' not in request.POST:
+    data = json.loads(request.body)
+    if 'token' not in data or 'food' not in data:
         return HttpResponseBadRequest('{"error": "Please supply a \'token\' and the \'food\' to save."}',
                                       content_type="application/json")
     try:
-        token_payload = jwt.decode(request.POST['token'], JWT_SECRET, 'HS256')
+        token_payload = jwt.decode(data['token'], JWT_SECRET, 'HS256')
     except jwt.InvalidSignatureError:
         return HttpResponseBadRequest('{"error": "Invalid signature of the authentication token."}',
                                       content_type="application/json")
@@ -114,13 +115,13 @@ def save_food(request):
         return HttpResponseBadRequest('{"error": "Could not find the user with id=' +
                                       token_payload['id'] + '. Was it deleted?"}',
                                       content_type="application/json")
-    food_dict = request.POST['food']
+    food_dict = data['food']
     if not all(k in food_dict for k in ['name', 'reference_amount', 'calories']):
         return HttpResponseBadRequest('{"error": "Please supply at least a \'name\', \'reference_amount\' ' +
                                       'and \'calories\' for each food item."}',
                                       content_type="application/json")
     mao = re.match("^\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*:\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*$",
-                   request.POST['name'])
+                   food_dict['name'])
     category = mao.groups()[0]
     name_addition = mao.groups()[1]
     try:
