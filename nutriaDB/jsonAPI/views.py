@@ -86,6 +86,88 @@ def query_ean(request):
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
 
+def details(request, id_str, amount=None):
+    if id_str[0] == '0':
+        try:
+            food = Product.objects.get(pk=int(id_str[1:]))
+        except Product.DoesNotExist:
+            return HttpResponseBadRequest('{"error": "There is no product with the id ' + id_str + '."}',
+                                          content_type="application/json")
+    elif id_str[1] == '1':
+        try:
+            food = Recipe.objects.get(pk=int(id_str[1:]))
+        except Recipe.DoesNotExist:
+            return HttpResponseBadRequest('{"error": "There is no recipe with the id ' + id_str + '."}',
+                                          content_type="application/json")
+    else:
+        return HttpResponseBadRequest('{"error": "The id begins with ' + id_str[0] +
+                                      ' which is an unknown type."}', content_type="application/json")
+    scaler_ingredient = Ingredient()
+    if amount is None:
+        scaler_ingredient.amount = food.reference_amount
+    else:
+        try:
+            scaler_ingredient.amount = float(amount)
+        except ValueError:
+            return HttpResponseBadRequest('{"error": "The given amount of ' + amount +
+                                          ' is not a number."}', content_type="application/json")
+    scaler_ingredient.food = food
+    author_name = food.author.first_name + ' ' + food.author.first_name
+    response_dict = {
+        'name': str(food),
+        'author': author_name,
+        'creation_date': str(food.creation_date),
+        'manufacturer': str(food.manufacturer) if type(food) is Product else author_name,
+        'reference_amount': food.reference_amount,
+        'calories': scaler_ingredient.calories,
+        'total_fat': scaler_ingredient.total_fat,
+        'saturated_fat': scaler_ingredient.saturated_fat,
+        'cholesterol': scaler_ingredient.cholesterol,
+        'protein': scaler_ingredient.protein,
+        'total_carbs': scaler_ingredient.total_carbs,
+        'sugar': scaler_ingredient.sugar,
+        'dietary_fiber': scaler_ingredient.dietary_fiber,
+        'salt': scaler_ingredient.salt,
+        'sodium': scaler_ingredient.sodium,
+        'potassium': scaler_ingredient.potassium,
+        'copper': scaler_ingredient.copper,
+        'iron': scaler_ingredient.iron,
+        'magnesium': scaler_ingredient.magnesium,
+        'manganese': scaler_ingredient.manganese,
+        'zinc': scaler_ingredient.zinc,
+        'phosphorous': scaler_ingredient.phosphorous,
+        'sulphur': scaler_ingredient.sulphur,
+        'chloro': scaler_ingredient.chloro,
+        'fluoric': scaler_ingredient.fluoric,
+        'vitamin_b1': scaler_ingredient.vitamin_b1,
+        'vitamin_b12': scaler_ingredient.vitamin_b12,
+        'vitamin_b6': scaler_ingredient.vitamin_b6,
+        'vitamin_c': scaler_ingredient.vitamin_c,
+        'vitamin_d': scaler_ingredient.vitamin_d,
+        'vitamin_e': scaler_ingredient.vitamin_e
+    }
+    if type(food) is Recipe:
+        response_dict['ingredients'] = []
+        for ingredient in food.ingredients.all():
+            if type(ingredient.food) is Product:
+                ingredient_id = '0' + str(ingredient.food.pk)
+            elif type(ingredient.food) is Recipe:
+                ingredient_id = '1' + str(ingredient.food.pk)
+            else:
+                raise Exception("Inconsistent Database!")
+            response_dict['ingredients'].append({
+                'id': ingredient_id,
+                'name': str(ingredient.food),
+                'amount': ingredient.amount / food.reference_amount * scaler_ingredient.amount,
+                'calories': ingredient.calories / food.reference_amount * scaler_ingredient.amount,
+                'total_fat': ingredient.total_fat / food.reference_amount * scaler_ingredient.amount,
+                'protein': ingredient.protein / food.reference_amount * scaler_ingredient.amount,
+                'total_carbs': ingredient.total_carbs / food.reference_amount * scaler_ingredient.amount,
+                'dietary_fiber': ingredient.dietary_fiber / food.reference_amount * scaler_ingredient.amount
+            })
+    return HttpResponse(json.dumps(response_dict), content_type="application/json")
+
+
 def save_food(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to save data via POST."}',

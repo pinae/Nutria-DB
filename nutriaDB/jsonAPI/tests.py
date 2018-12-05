@@ -49,6 +49,141 @@ class QueryTests(TestCase):
         self.assertNotIn('food', rc)
         self.assertIn('error', rc)
 
+    def testProductDetails(self):
+        response = self.client.get('/json/food/05')
+        rc = json.loads(response.content)
+        self.assertNotIn('error', rc)
+        self.assertEqual(rc['name'], "Ei: Hühnerei")
+        egg_values = {
+            "reference_amount": 100.0,
+            "calories": 137.0,
+            "total_fat": 9.32,
+            "saturated_fat": 2.71,
+            "cholesterol": 396.0,
+            "protein": 11.85,
+            "total_carbs": 1.53,
+            "sugar": 1.53,
+            "dietary_fiber": 0.0,
+            "salt": 0.3,
+            "sodium": 144.0,
+            "potassium": 147.0,
+            "copper": 65.0,
+            "iron": 1.83,
+            "magnesium": 11.0,
+            "manganese": 0.071,
+            "zinc": 1.49,
+            "phosphorous": 210.0,
+            "sulphur": 180.0,
+            "chloro": 180.0,
+            "fluoric": 0.11,
+            "vitamin_b1": 0.1,
+            "vitamin_b12": 0.0019,
+            "vitamin_b6": 0.08,
+            "vitamin_c": 0.0,
+            "vitamin_d": 0.00293,
+            "vitamin_e": 1.96
+        }
+        for k in egg_values.keys():
+            self.assertAlmostEqual(rc[k], egg_values[k], 5)
+
+    def testRecipeDetails(self):
+        response = self.client.get('/json/food/11')
+        rc = json.loads(response.content)
+        self.assertNotIn('error', rc)
+        self.assertEqual(rc['name'], "Backware: Weizenbrötchen")
+        bread_bun_values = {
+            "reference_amount": 528.0,
+            "calories": 1817.66,
+            "total_fat": 5.86,
+            "saturated_fat": 0.8854,
+            "cholesterol": 0.0,
+            "protein": 58.46,
+            "total_carbs": 366.69,
+            "sugar": 7.866,
+            "dietary_fiber": 20.665,
+            "salt": 9.8905,
+            "sodium": 3904.9,
+            "potassium": 1057.3,
+            "copper": 750.716,
+            "iron": 8.271,
+            "magnesium": 164.5,
+            "manganese": 3.5795,
+            "zinc": 5.165,
+            "phosphorous": 752.5,
+            "sulphur": 550.6,
+            "chloro": 6293.1,
+            "fluoric": 255.033,
+            "vitamin_b1": 1.0075,
+            "vitamin_b12": 0.0,
+            "vitamin_b6": 0.818,
+            "vitamin_c": 0.0,
+            "vitamin_d": 0.0,
+            "vitamin_e": 1.045
+        }
+        for k in bread_bun_values.keys():
+            self.assertAlmostEqual(rc[k], bread_bun_values[k], 5)
+        self.assertIn('ingredients', rc)
+        ingredient_list = [
+            {'id': '01', 'name': 'Mehl: Weizenmehl Type 550', 'amount': 500, 'calories': 352*5},
+            {'id': '02', 'name': 'Backzutat: frische Backhefe', 'amount': 15, 'calories': 328*0.15},
+            {'id': '03', 'name': 'Gewürz: Speisesalz', 'amount': 10, 'calories': 0},
+            {'id': '04', 'name': 'Backzutat: Biomalz', 'amount': 3, 'calories': 282*0.03}
+        ]
+        for i, ing in enumerate(rc['ingredients']):
+            self.assertEqual(ing['id'], ingredient_list[i]['id'])
+            self.assertEqual(ing['name'], ingredient_list[i]['name'])
+            self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
+            self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+
+    def testRecipeDetailsScaled(self):
+        response = self.client.get('/json/food/11/52.8')
+        rc = json.loads(response.content)
+        self.assertNotIn('error', rc)
+        self.assertEqual(rc['name'], "Backware: Weizenbrötchen")
+        bread_bun_values = {
+            "reference_amount": 528,
+            "calories": 181.766,
+            "total_fat": 0.586,
+            "saturated_fat": 0.08854,
+            "cholesterol": 0.0,
+            "protein": 5.846,
+            "total_carbs": 36.669,
+            "sugar": 0.7866,
+            "dietary_fiber": 2.0665,
+            "salt": 0.98905,
+            "sodium": 390.49,
+            "potassium": 105.73,
+            "copper": 75.0716,
+            "iron": 0.8271,
+            "magnesium": 16.45,
+            "manganese": 0.35795,
+            "zinc": 0.5165,
+            "phosphorous": 75.25,
+            "sulphur": 55.06,
+            "chloro": 629.31,
+            "fluoric": 25.5033,
+            "vitamin_b1": 0.10075,
+            "vitamin_b12": 0.0,
+            "vitamin_b6": 0.0818,
+            "vitamin_c": 0.0,
+            "vitamin_d": 0.0,
+            "vitamin_e": 0.1045
+        }
+        for k in bread_bun_values.keys():
+            self.assertAlmostEqual(rc[k], bread_bun_values[k], 5)
+        self.assertIn('ingredients', rc)
+        ingredient_list = [
+            {'id': '01', 'name': 'Mehl: Weizenmehl Type 550', 'amount': 50, 'calories': 352*5/10},
+            {'id': '02', 'name': 'Backzutat: frische Backhefe', 'amount': 1.5, 'calories': 328*0.15/10},
+            {'id': '03', 'name': 'Gewürz: Speisesalz', 'amount': 1, 'calories': 0},
+            {'id': '04', 'name': 'Backzutat: Biomalz', 'amount': 0.3, 'calories': 282*0.03/10}
+        ]
+        for i, ing in enumerate(rc['ingredients']):
+            self.assertEqual(ing['id'], ingredient_list[i]['id'])
+            self.assertEqual(ing['name'], ingredient_list[i]['name'])
+            self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
+            self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+
 
 class UserTests(TestCase):
     def testRegistration(self):
