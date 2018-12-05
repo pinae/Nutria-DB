@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 import json
+import jwt
+from nutriaDB.settings import JWT_SECRET
 
 
 class QueryTests(TestCase):
@@ -45,3 +47,25 @@ class QueryTests(TestCase):
         rc = json.loads(response.content)
         self.assertNotIn('food', rc)
         self.assertIn('error', rc)
+
+
+class UserTests(TestCase):
+    def testRegistration(self):
+        response = self.client.post('/json/register', data=json.dumps({
+            "username": "maxm",
+            "first_name": "Max",
+            "last_name": "Mustermann",
+            "email": "max@mustermann.de",
+            "password": "test1234"
+        }), content_type='application/json')
+        rc = json.loads(response.content)
+        self.assertIn('token', rc)
+        user = User.objects.get(username="maxm")
+        self.assertEqual(user.username, "maxm")
+        self.assertEqual(user.first_name, "Max")
+        self.assertEqual(user.last_name, "Mustermann")
+        self.assertEqual(user.email, "max@mustermann.de")
+        self.assertTrue(user.check_password("test1234"))
+        pl = jwt.decode(rc['token'], JWT_SECRET, 'HS256')
+        self.assertIn('id', pl)
+        self.assertEqual(pl['email'], "max@mustermann.de")
