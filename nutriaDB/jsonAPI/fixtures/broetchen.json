@@ -36,6 +36,20 @@
     }
   },
   {
+    "model": "backend.Category",
+    "pk": 5,
+    "fields": {
+      "name": "Ei"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 6,
+    "fields": {
+      "name": "Öl"
+    }
+  },
+  {
     "model": "backend.Product",
     "pk": 1,
     "fields": {
@@ -188,6 +202,120 @@
     }
   },
   {
+    "model": "backend.Product",
+    "pk": 5,
+    "fields": {
+      "category": 5,
+      "name_addition": "Hühnerei",
+      "author": 1,
+      "creation_date": "2018-12-05 14:00:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 137.0,
+      "total_fat": 9.32,
+      "saturated_fat": 2.71,
+      "cholesterol": 396.0,
+      "protein": 11.85,
+      "total_carbs": 1.53,
+      "sugar": 1.53,
+      "dietary_fiber": 0.0,
+      "salt": 0.3,
+      "sodium": 144.0,
+      "potassium": 147.0,
+      "copper": 65.0,
+      "iron": 1.83,
+      "magnesium": 11.0,
+      "manganese": 0.071,
+      "zinc": 1.49,
+      "phosphorous": 210.0,
+      "sulphur": 180.0,
+      "chloro": 180.0,
+      "fluoric": 0.11,
+      "vitamin_b1": 0.1,
+      "vitamin_b12": 0.0019,
+      "vitamin_b6": 0.08,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.00293,
+      "vitamin_e": 1.96
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 6,
+    "fields": {
+      "category": 2,
+      "name_addition": "Zucker weiß",
+      "author": 1,
+      "creation_date": "2018-12-05 14:08:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 405.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 99.8,
+      "sugar": 99.8,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 0.0,
+      "potassium": 2.0,
+      "copper": 0.015,
+      "iron": 0.29,
+      "magnesium": 0.0,
+      "manganese": 0.01,
+      "zinc": 0.02,
+      "phosphorous": 0.0,
+      "sulphur": 0.0,
+      "chloro": 2.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 7,
+    "fields": {
+      "category": 6,
+      "name_addition": "Sonneblumenöl",
+      "author": 1,
+      "creation_date": "2018-12-05 14:08:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 884.0,
+      "total_fat": 100.0,
+      "saturated_fat": 10.68,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 0.0,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 1.0,
+      "potassium": 1.0,
+      "copper": 0.001,
+      "iron": 0.07,
+      "magnesium": 0.0,
+      "manganese": 0.0,
+      "zinc": 0.05,
+      "phosphorous": 0.0,
+      "sulphur": 0.0,
+      "chloro": 1.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 62.2
+    }
+  },
+  {
     "model": "backend.Recipe",
     "pk": 1,
     "fields": {
@@ -195,6 +323,16 @@
       "name_addition": "Weizenbrötchen",
       "author": 1,
       "creation_date": "2018-12-04 14:53:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 2,
+    "fields": {
+      "category": 4,
+      "name_addition": "Toastbrot soft",
+      "author": 1,
+      "creation_date": "2018-12-05 14:13:12.932332+00:00"
     }
   },
   {
@@ -231,6 +369,60 @@
       "recipe": 1,
       "product": 4,
       "amount": 3.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 5,
+    "fields": {
+      "recipe": 2,
+      "product": 1,
+      "amount": 450.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 6,
+    "fields": {
+      "recipe": 2,
+      "product": 3,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 7,
+    "fields": {
+      "recipe": 2,
+      "product": 7,
+      "amount": 75.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 8,
+    "fields": {
+      "recipe": 2,
+      "product": 6,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 9,
+    "fields": {
+      "recipe": 2,
+      "product": 2,
+      "amount": 21.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 10,
+    "fields": {
+      "recipe": 2,
+      "product": 5,
+      "amount": 68.0
     }
   }
 ]

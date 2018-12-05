@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import json
 import jwt
 from nutriaDB.settings import JWT_SECRET
-from backend.models import Category, Product
+from backend.models import Category, Product, Recipe
 
 
 class QueryTests(TestCase):
@@ -174,3 +174,86 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(p.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_d, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_e, 0.18, 5)
+
+    def testSaveRecipe(self):
+        token = self.createUserAndGetToken()
+        response = self.client.post('/json/save', data=json.dumps({
+            "token": token,
+            "food": {
+                "name": "Mehl: Weizenmehl Type 405",
+                "reference_amount": 100,
+                "calories": 348,
+                "total_fat": 0.98,
+                "saturated_fat": 0.14,
+                "cholesterol": 0.0,
+                "protein": 10.04,
+                "total_carbs": 72.34,
+                "sugar": 0.73,
+                "dietary_fiber": 2.75,
+                "salt": 0.0,
+                "sodium": 1,
+                "potassium": 168,
+                "copper": 106,
+                "iron": 0.57,
+                "magnesium": 14,
+                "manganese": 0.395,
+                "zinc": 0.51,
+                "phosphorous": 62,
+                "sulphur": 100,
+                "chloro": 50,
+                "fluoric": 0.05,
+                "vitamin_b1": 0.1,
+                "vitamin_b12": 0.0,
+                "vitamin_b6": 0.04,
+                "vitamin_c": 0.0,
+                "vitamin_d": 0.0,
+                "vitamin_e": 0.18
+            }
+        }), content_type='application/json')
+        mehl_cat = Category.objects.get(name="Mehl")
+        mehl405 = Product.objects.filter(category=mehl_cat, name_addition="Weizenmehl Type 405")[0]
+        response = self.client.post('/json/save', data=json.dumps({
+            "token": token,
+            "food": {
+                "name": "Backware: Toastbrot selbstgemacht",
+                "ingredients": [
+                    {'food': '0' + str(mehl405.pk), 'amount': 450},
+                    {'food': '03', 'amount': 10},
+                    {'food': '07', 'amount': 75},
+                    {'food': '06', 'amount': 10},
+                    {'food': '02', 'amount': 21},
+                    {'food': '05', 'amount': 68}
+                ]
+            }
+        }), content_type='application/json')
+        self.assertIn('success', json.loads(response.content))
+        backware_cat = Category.objects.get(name="Backware")
+        toast = Recipe.objects.filter(category=backware_cat, name_addition="Toastbrot selbstgemacht")[0]
+        self.assertEqual(str(toast), "Backware: Toastbrot selbstgemacht")
+        self.assertAlmostEqual(toast.reference_amount, 634, 5)
+        self.assertAlmostEqual(toast.calories, 2431.54, 5)
+        self.assertAlmostEqual(toast.total_fat, 85.9996, 5)
+        self.assertAlmostEqual(toast.saturated_fat, 10.5248, 5)
+        self.assertAlmostEqual(toast.cholesterol, 269.28, 5)
+        self.assertAlmostEqual(toast.protein, 60.714, 5)
+        self.assertAlmostEqual(toast.total_carbs, 343.2704, 5)
+        self.assertAlmostEqual(toast.sugar, 15.1118, 5)
+        self.assertAlmostEqual(toast.dietary_fiber, 16.785, 5)
+        self.assertAlmostEqual(toast.salt, 10.1023, 5)
+        self.assertAlmostEqual(toast.sodium, 3998.67, 5)
+        self.assertAlmostEqual(toast.potassium, 1277.31, 5)
+        self.assertAlmostEqual(toast.copper, 1571.21225, 5)
+        self.assertAlmostEqual(toast.iron, 8.1009, 5)
+        self.assertAlmostEqual(toast.magnesium, 130.78, 5)
+        self.assertAlmostEqual(toast.manganese, 1.95808, 5)
+        self.assertAlmostEqual(toast.zinc, 5.0327, 5)
+        self.assertAlmostEqual(toast.phosphorous, 707.7, 5)
+        self.assertAlmostEqual(toast.sulphur, 637.7, 5)
+        self.assertAlmostEqual(toast.chloro, 6411.85, 5)
+        self.assertAlmostEqual(toast.fluoric, 5.3418, 5)
+        self.assertAlmostEqual(toast.vitamin_b1, 1.0073, 5)
+        self.assertAlmostEqual(toast.vitamin_b12, 0.001292, 5)
+        self.assertAlmostEqual(toast.vitamin_b6, 0.6544, 5)
+        self.assertAlmostEqual(toast.vitamin_c, 0.0, 5)
+        self.assertAlmostEqual(toast.vitamin_d, 0.0019924, 5)
+        self.assertAlmostEqual(toast.vitamin_e, 48.8558, 5)

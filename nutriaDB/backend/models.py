@@ -504,7 +504,7 @@ class Ingredient(models.Model):
 
     @property
     def potassium(self):
-        return self.scale_to_amount(self.food.potaussium)
+        return self.scale_to_amount(self.food.potassium)
 
     @potassium.setter
     def potassium(self, new_potassium_value):

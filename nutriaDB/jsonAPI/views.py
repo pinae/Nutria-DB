@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import re
 import jwt
-from backend.models import Product, Recipe, Category
+from backend.models import Product, Recipe, Category, Ingredient
 from jsonAPI.helpers import convert_digits_to_bytes
 from nutriaDB.settings import JWT_SECRET
 
@@ -116,9 +116,8 @@ def save_food(request):
                                       token_payload['id'] + '. Was it deleted?"}',
                                       content_type="application/json")
     food_dict = data['food']
-    if not all(k in food_dict for k in ['name', 'reference_amount', 'calories']):
-        return HttpResponseBadRequest('{"error": "Please supply at least a \'name\', \'reference_amount\' ' +
-                                      'and \'calories\' for each food item."}',
+    if 'name' not in food_dict:
+        return HttpResponseBadRequest('{"error": "Please supply at least a \'name\' for each food item."}',
                                       content_type="application/json")
     mao = re.match("^\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*:\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*$",
                    food_dict['name'])
@@ -132,8 +131,47 @@ def save_food(request):
              "categories": [c.name for c in Category.objects.all()]}), content_type="application/json")
     if 'ingredients' in food_dict and 'ean' not in food_dict:
         food = Recipe(category=cat, name_addition=name_addition, author=user)
-        # TODO: Parse List of Ingredients
+        ingredient_list = []
+        for ingredient in food_dict['ingredients']:
+            if ingredient['food'][0] == '0':
+                try:
+                    product = Product.objects.get(pk=int(ingredient['food'][1:]))
+                except Product.DoesNotExist:
+                    return HttpResponseBadRequest(json.dumps(
+                        {"error": "There is no product with the id " + ingredient['food'] + "!"}),
+                        content_type="application/json")
+                try:
+                    amount = float(ingredient['amount'])
+                except ValueError:
+                    return HttpResponseBadRequest(json.dumps(
+                            {"error": "The amount you gave for the ingredient " + str(product) +
+                                      "(id: " + ingredient['food'] + ") is not a number."}),
+                            content_type="application/json")
+                ingredient_list.append({'food': product, 'amount': amount})
+            elif ingredient['food'][0] == '1':
+                try:
+                    recipe = Recipe.objects.get(pk=int(ingredient['food'][1:]))
+                except Recipe.DoesNotExist:
+                    return HttpResponseBadRequest(json.dumps(
+                        {"error": "There is no recipe with the id " + ingredient['food'] + "!"}),
+                        content_type="application/json")
+                try:
+                    amount = float(ingredient['amount'])
+                except ValueError:
+                    return HttpResponseBadRequest(json.dumps(
+                            {"error": "The amount you gave for the ingredient " + str(recipe) +
+                                      "(id: " + ingredient['food'] + ") is not a number."}),
+                            content_type="application/json")
+                ingredient_list.append({'food': product, 'amount': amount})
+            else:
+                return HttpResponseBadRequest(json.dumps(
+                        {"error": "The id begins with " + ingredient['food'][0] + " which is an unknown type."}),
+                        content_type="application/json")
         food.save()
+        for ingredient in ingredient_list:
+            i = Ingredient(recipe=food, amount=ingredient['amount'])
+            i.food = ingredient['food']
+            i.save()
         return HttpResponse('{"success": "Recipe successfully added."}', content_type="application/json")
     elif all(k in food_dict for k in ['calories', 'reference_amount']):
         try:
@@ -300,7 +338,9 @@ def save_food(request):
     else:
         return HttpResponseBadRequest('{"error": "You supplied data for a product but it misses a reference ' +
                                       'amount or calorie count. Please make sure the \'calories\' and ' +
-                                      '\'reference_amount\' fields are present."}', content_type="application/json")
+                                      '\'reference_amount\' fields are present. If you wanted to save a ' +
+                                      'recipe you have to supply a list of ingredients."}',
+                                      content_type="application/json")
 
 
 def log_in(request):
