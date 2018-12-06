@@ -134,16 +134,14 @@ def details(request, id_str, amount=None):
                 ingredient_id = '1' + str(ingredient.food.pk)
             else:
                 raise Exception("Inconsistent Database!")
-            response_dict['ingredients'].append({
+            ingredient_overview = {
                 'id': ingredient_id,
-                'name': str(ingredient.food),
-                'amount': ingredient.amount / food.reference_amount * scaler_ingredient.amount,
-                'calories': ingredient.calories / food.reference_amount * scaler_ingredient.amount,
-                'total_fat': ingredient.total_fat / food.reference_amount * scaler_ingredient.amount,
-                'protein': ingredient.protein / food.reference_amount * scaler_ingredient.amount,
-                'total_carbs': ingredient.total_carbs / food.reference_amount * scaler_ingredient.amount,
-                'dietary_fiber': ingredient.dietary_fiber / food.reference_amount * scaler_ingredient.amount
-            })
+                'name': str(ingredient.food)
+            }
+            for element in ['amount', 'calories', 'total_fat', 'protein', 'total_carbs', 'dietary_fiber']:
+                ingredient_overview[element] = (ingredient.__getattribute__(element)
+                                                / food.reference_amount * scaler_ingredient.amount)
+            response_dict['ingredients'].append(ingredient_overview)
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
 
