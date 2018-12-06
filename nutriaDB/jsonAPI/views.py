@@ -216,39 +216,27 @@ def save_food(request):
         ingredient_list = []
         for ingredient in food_dict['ingredients']:
             if ingredient['food'][0] == '0':
-                try:
-                    product = Product.objects.get(pk=int(ingredient['food'][1:]))
-                except Product.DoesNotExist:
-                    return HttpResponseBadRequest(json.dumps(
-                        {"error": "There is no product with the id " + ingredient['food'] + "!"}),
-                        content_type="application/json")
-                try:
-                    amount = float(ingredient['amount'])
-                except ValueError:
-                    return HttpResponseBadRequest(json.dumps(
-                            {"error": "The amount you gave for the ingredient " + str(product) +
-                                      "(id: " + ingredient['food'] + ") is not a number."}),
-                            content_type="application/json")
-                ingredient_list.append({'food': product, 'amount': amount})
+                food_class = Product
             elif ingredient['food'][0] == '1':
-                try:
-                    recipe = Recipe.objects.get(pk=int(ingredient['food'][1:]))
-                except Recipe.DoesNotExist:
-                    return HttpResponseBadRequest(json.dumps(
-                        {"error": "There is no recipe with the id " + ingredient['food'] + "!"}),
-                        content_type="application/json")
-                try:
-                    amount = float(ingredient['amount'])
-                except ValueError:
-                    return HttpResponseBadRequest(json.dumps(
-                            {"error": "The amount you gave for the ingredient " + str(recipe) +
-                                      "(id: " + ingredient['food'] + ") is not a number."}),
-                            content_type="application/json")
-                ingredient_list.append({'food': product, 'amount': amount})
+                food_class = Recipe
             else:
                 return HttpResponseBadRequest(json.dumps(
                         {"error": "The id begins with " + ingredient['food'][0] + " which is an unknown type."}),
                         content_type="application/json")
+            try:
+                ingredient_food = food_class.objects.get(pk=int(ingredient['food'][1:]))
+            except food_class.DoesNotExist:
+                return HttpResponseBadRequest(json.dumps(
+                    {"error": "There is no " + str(food_class.__name__) + " with the id " + ingredient['food'] + "!"}),
+                    content_type="application/json")
+            try:
+                amount = float(ingredient['amount'])
+            except ValueError:
+                return HttpResponseBadRequest(json.dumps(
+                    {"error": "The amount you gave for the " + food_class.__name__ + " " + str(ingredient_food) +
+                              "(id: " + ingredient['food'] + ") is not a number."}),
+                    content_type="application/json")
+            ingredient_list.append({'food': ingredient_food, 'amount': amount})
         food.save()
         for ingredient in ingredient_list:
             i = Ingredient(recipe=food, amount=ingredient['amount'])
@@ -265,156 +253,16 @@ def save_food(request):
                                           'values. Please supply floats."}', content_type="application/json")
         if 'ean' in food_dict:
             food.ean = convert_digits_to_bytes(food_dict['ean'])
-        if 'total_fat' in food_dict:
-            try:
-                food.total_fat = float(food_dict['total_fat'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of total_fat must be a float."}',
-                                              content_type="application/json")
-        if 'saturated_fat' in food_dict:
-            try:
-                food.saturated_fat = float(food_dict['saturated_fat'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of saturated_fat must be a float."}',
-                                              content_type="application/json")
-        if 'cholesterol' in food_dict:
-            try:
-                food.cholesterol = float(food_dict['cholesterol'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of cholesterol must be a float."}',
-                                              content_type="application/json")
-        if 'protein' in food_dict:
-            try:
-                food.protein = float(food_dict['protein'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of protein must be a float."}',
-                                              content_type="application/json")
-        if 'total_carbs' in food_dict:
-            try:
-                food.total_carbs = float(food_dict['total_carbs'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of total_carbs must be a float."}',
-                                              content_type="application/json")
-        if 'sugar' in food_dict:
-            try:
-                food.sugar = float(food_dict['sugar'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of sugar must be a float."}',
-                                              content_type="application/json")
-        if 'dietary_fiber' in food_dict:
-            try:
-                food.dietary_fiber = float(food_dict['dietary_fiber'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of dietary_fiber must be a float."}',
-                                              content_type="application/json")
-        if 'salt' in food_dict:
-            try:
-                food.salt = float(food_dict['salt'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of salt must be a float."}',
-                                              content_type="application/json")
-        if 'sodium' in food_dict:
-            try:
-                food.sodium = float(food_dict['sodium'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of sodium must be a float."}',
-                                              content_type="application/json")
-        if 'potassium' in food_dict:
-            try:
-                food.potassium = float(food_dict['potassium'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of potassium must be a float."}',
-                                              content_type="application/json")
-        if 'copper' in food_dict:
-            try:
-                food.copper = float(food_dict['copper'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of copper must be a float."}',
-                                              content_type="application/json")
-        if 'iron' in food_dict:
-            try:
-                food.iron = float(food_dict['iron'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of iron must be a float."}',
-                                              content_type="application/json")
-        if 'magnesium' in food_dict:
-            try:
-                food.magnesium = float(food_dict['magnesium'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of magnesium must be a float."}',
-                                              content_type="application/json")
-        if 'manganese' in food_dict:
-            try:
-                food.manganese = float(food_dict['manganese'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of manganese must be a float."}',
-                                              content_type="application/json")
-        if 'zinc' in food_dict:
-            try:
-                food.zinc = float(food_dict['zinc'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of zinc must be a float."}',
-                                              content_type="application/json")
-        if 'phosphorous' in food_dict:
-            try:
-                food.phosphorous = float(food_dict['phosphorous'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of phosphorous must be a float."}',
-                                              content_type="application/json")
-        if 'sulphur' in food_dict:
-            try:
-                food.sulphur = float(food_dict['sulphur'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of sulphur must be a float."}',
-                                              content_type="application/json")
-        if 'chloro' in food_dict:
-            try:
-                food.chloro = float(food_dict['chloro'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of chloro must be a float."}',
-                                              content_type="application/json")
-        if 'fluoric' in food_dict:
-            try:
-                food.fluoric = float(food_dict['fluoric'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of fluoric must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_b1' in food_dict:
-            try:
-                food.vitamin_b1 = float(food_dict['vitamin_b1'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_b1 must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_b12' in food_dict:
-            try:
-                food.vitamin_b12 = float(food_dict['vitamin_b12'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_b12 must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_b6' in food_dict:
-            try:
-                food.vitamin_b6 = float(food_dict['vitamin_b6'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_b6 must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_c' in food_dict:
-            try:
-                food.vitamin_c = float(food_dict['vitamin_c'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_c must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_d' in food_dict:
-            try:
-                food.vitamin_d = float(food_dict['vitamin_d'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_d must be a float."}',
-                                              content_type="application/json")
-        if 'vitamin_e' in food_dict:
-            try:
-                food.vitamin_e = float(food_dict['vitamin_e'])
-            except ValueError:
-                return HttpResponseBadRequest('{"error": "The amount of vitamin_e must be a float."}',
-                                              content_type="application/json")
+        for element in ['total_fat', 'saturated_fat', 'cholesterol', 'protein', 'total_carbs', 'sugar',
+                        'dietary_fiber', 'salt', 'sodium', 'potassium', 'copper', 'iron', 'magnesium',
+                        'manganese', 'zinc', 'phosphorous', 'sulphur', 'chloro', 'fluoric',
+                        'vitamin_b1', 'vitamin_b12', 'vitamin_b6', 'vitamin_c', 'vitamin_d', 'vitamin_e']:
+            if element in food_dict:
+                try:
+                    food.__setattr__(element, float(food_dict[element]))
+                except ValueError:
+                    return HttpResponseBadRequest('{"error": "The amount of ' + element + ' must be a float."}',
+                                                  content_type="application/json")
         food.save()
         return HttpResponse('{"success": "Product successfully added."}', content_type="application/json")
     else:
