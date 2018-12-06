@@ -50,6 +50,27 @@
     }
   },
   {
+    "model": "backend.Category",
+    "pk": 7,
+    "fields": {
+      "name": "Pasta"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 8,
+    "fields": {
+      "name": "Gemüse"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 9,
+    "fields": {
+      "name": "Milch"
+    }
+  },
+  {
     "model": "backend.Product",
     "pk": 1,
     "fields": {
@@ -316,6 +337,196 @@
     }
   },
   {
+    "model": "backend.Product",
+    "pk": 8,
+    "fields": {
+      "category": 5,
+      "name_addition": "Hühnerei Eigelb roh",
+      "author": 1,
+      "creation_date": "2018-12-06 23:23:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 348.0,
+      "total_fat": 31.9,
+      "saturated_fat": 9.41,
+      "cholesterol": 1260.0,
+      "protein": 16.10,
+      "total_carbs": 0.3,
+      "sugar": 0.21,
+      "dietary_fiber": 0.0,
+      "salt": 0.13,
+      "sodium": 51.0,
+      "potassium": 138.0,
+      "copper": 0.35,
+      "iron": 7.2,
+      "magnesium": 16.0,
+      "manganese": 0.125,
+      "zinc": 3.8,
+      "phosphorous": 590.0,
+      "sulphur": 170.0,
+      "chloro": 180.0,
+      "fluoric": 0.03,
+      "vitamin_b1": 0.29,
+      "vitamin_b12": 0.002,
+      "vitamin_b6": 0.3,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.00558,
+      "vitamin_e": 5.5
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 9,
+    "fields": {
+      "category": 6,
+      "name_addition": "Olivenöl",
+      "author": 1,
+      "creation_date": "2018-12-06 23:28:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 884.0,
+      "total_fat": 100.0,
+      "saturated_fat": 14.38,
+      "cholesterol": 1.0,
+      "protein": 0.0,
+      "total_carbs": 0.2,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 1.0,
+      "potassium": 1.0,
+      "copper": 0.005,
+      "iron": 0.13,
+      "magnesium": 1.0,
+      "manganese": 0.001,
+      "zinc": 0.05,
+      "phosphorous": 2.0,
+      "sulphur": 0.0,
+      "chloro": 100.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 11.91
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 10,
+    "fields": {
+      "category": 8,
+      "name_addition": "Champignons gedünstet",
+      "author": 1,
+      "creation_date": "2018-12-06 23:42:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 100.0,
+      "total_fat": 6.57,
+      "saturated_fat": 4.02,
+      "cholesterol": 17.0,
+      "protein": 4.28,
+      "total_carbs": 4.17,
+      "sugar": 0.75,
+      "dietary_fiber": 1.93,
+      "salt": 0.32,
+      "sodium": 127.0,
+      "potassium": 336.0,
+      "copper": 0.336,
+      "iron": 1.0,
+      "magnesium": 15.0,
+      "manganese": 0.113,
+      "zinc": 0.51,
+      "phosphorous": 122.0,
+      "sulphur": 42.0,
+      "chloro": 290.0,
+      "fluoric": 0.028,
+      "vitamin_b1": 0.08,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.06,
+      "vitamin_c": 6.48,
+      "vitamin_d": 0.00189,
+      "vitamin_e": 0.28
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 11,
+    "fields": {
+      "category": 9,
+      "name_addition": "Kuhmilch 1,5% Fett ultrahocherhitzt",
+      "author": 1,
+      "creation_date": "2018-12-06 23:49:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 48.0,
+      "total_fat": 1.6,
+      "saturated_fat": 1.08,
+      "cholesterol": 4.0,
+      "protein": 3.39,
+      "total_carbs": 4.8,
+      "sugar": 4.8,
+      "dietary_fiber": 0.0,
+      "salt": 0.12,
+      "sodium": 47.0,
+      "potassium": 155.0,
+      "copper": 0.01,
+      "iron": 0.05,
+      "magnesium": 12.0,
+      "manganese": 0.002,
+      "zinc": 0.43,
+      "phosphorous": 91.0,
+      "sulphur": 31.0,
+      "chloro": 101.0,
+      "fluoric": 0.017,
+      "vitamin_b1": 0.04,
+      "vitamin_b12": 0.0004,
+      "vitamin_b6": 0.05,
+      "vitamin_c": 1.7,
+      "vitamin_d": 0.00003,
+      "vitamin_e": 0.04
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 12,
+    "fields": {
+      "category": 9,
+      "name_addition": "Sahne 30% Fett",
+      "author": 1,
+      "creation_date": "2018-12-06 23:55:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 303.0,
+      "total_fat": 31.7,
+      "saturated_fat": 19.0,
+      "cholesterol": 84.0,
+      "protein": 2.36,
+      "total_carbs": 3.27,
+      "sugar": 3.27,
+      "dietary_fiber": 0.0,
+      "salt": 0.09,
+      "sodium": 34.0,
+      "potassium": 112.0,
+      "copper": 0.006,
+      "iron": 0.03,
+      "magnesium": 10.0,
+      "manganese": 0.002,
+      "zinc": 0.26,
+      "phosphorous": 63.0,
+      "sulphur": 20.0,
+      "chloro": 69.0,
+      "fluoric": 0.012,
+      "vitamin_b1": 0.03,
+      "vitamin_b12": 0.0004,
+      "vitamin_b6": 0.04,
+      "vitamin_c": 1.0,
+      "vitamin_d": 0.0011,
+      "vitamin_e": 0.71
+    }
+  },
+  {
     "model": "backend.Recipe",
     "pk": 1,
     "fields": {
@@ -333,6 +544,16 @@
       "name_addition": "Toastbrot soft",
       "author": 1,
       "creation_date": "2018-12-05 14:13:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 3,
+    "fields": {
+      "category": 7,
+      "name_addition": "Bandnudeln selbstgemacht",
+      "author": 1,
+      "creation_date": "2018-12-06 23:30:12.932332+00:00"
     }
   },
   {
@@ -422,7 +643,43 @@
     "fields": {
       "recipe": 2,
       "product": 5,
-      "amount": 68.0
+      "amount": 51.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 11,
+    "fields": {
+      "recipe": 3,
+      "product": 1,
+      "amount": 200.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 12,
+    "fields": {
+      "recipe": 3,
+      "product": 5,
+      "amount": 102.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 13,
+    "fields": {
+      "recipe": 3,
+      "product": 8,
+      "amount": 34.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 14,
+    "fields": {
+      "recipe": 3,
+      "product": 9,
+      "amount": 6.0
     }
   }
 ]
