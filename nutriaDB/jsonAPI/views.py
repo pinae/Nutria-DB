@@ -48,9 +48,7 @@ def query_food(request):
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
                 [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes]
     }
-    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
-    response['Access-Control-Allow-Origin'] = '*'
-    return response
+    return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
 
 def query_ean(request):
@@ -85,9 +83,7 @@ def query_ean(request):
     response_dict = {
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products]
     }
-    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
-    response['Access-Control-Allow-Origin'] = '*'
-    return response
+    return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
 
 def details(request, id_str, amount=None):
@@ -116,7 +112,10 @@ def details(request, id_str, amount=None):
             return HttpResponseBadRequest('{"error": "The given amount of ' + amount +
                                           ' is not a number."}', content_type="application/json")
     scaler_ingredient.food = food
-    author_name = food.author.first_name + ' ' + food.author.first_name
+    if food.author:
+        author_name = food.author.first_name + ' ' + food.author.first_name
+    else:
+        author_name = None
     response_dict = {
         'name': str(food),
         'author': author_name,
@@ -146,9 +145,7 @@ def details(request, id_str, amount=None):
                 ingredient_overview[element] = (ingredient.__getattribute__(element)
                                                 / food.reference_amount * scaler_ingredient.amount)
             response_dict['ingredients'].append(ingredient_overview)
-    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
-    response['Access-Control-Allow-Origin'] = '*'
-    return response
+    return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
 
 def save_food(request):
