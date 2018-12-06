@@ -48,7 +48,9 @@ def query_food(request):
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
                 [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes]
     }
-    return HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 def query_ean(request):
@@ -83,7 +85,9 @@ def query_ean(request):
     response_dict = {
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products]
     }
-    return HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 def details(request, id_str, amount=None):
@@ -142,7 +146,9 @@ def details(request, id_str, amount=None):
                 ingredient_overview[element] = (ingredient.__getattribute__(element)
                                                 / food.reference_amount * scaler_ingredient.amount)
             response_dict['ingredients'].append(ingredient_overview)
-    return HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response = HttpResponse(json.dumps(response_dict), content_type="application/json")
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 def save_food(request):
