@@ -45,8 +45,8 @@ def query_food(request):
                                     Q(category__name__icontains=query_string)).\
         prefetch_related('category').order_by('category__name', 'name_addition')[:query_count]
     response_dict = {
-        'food': [('0' + str(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
-                [('1' + str(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes]
+        'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
+                [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes]
     }
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
@@ -81,7 +81,7 @@ def query_ean(request):
     products = Product.objects.filter(ean__exact=convert_digits_to_bytes(query_ean)).\
         prefetch_related('category').order_by('category__name', 'name_addition')[:query_count]
     response_dict = {
-        'food': [('0' + str(p.pk), p.category.name + ': ' + p.name_addition) for p in products]
+        'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products]
     }
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
@@ -118,34 +118,13 @@ def details(request, id_str, amount=None):
         'author': author_name,
         'creation_date': str(food.creation_date),
         'manufacturer': str(food.manufacturer) if type(food) is Product else author_name,
-        'reference_amount': food.reference_amount,
-        'calories': scaler_ingredient.calories,
-        'total_fat': scaler_ingredient.total_fat,
-        'saturated_fat': scaler_ingredient.saturated_fat,
-        'cholesterol': scaler_ingredient.cholesterol,
-        'protein': scaler_ingredient.protein,
-        'total_carbs': scaler_ingredient.total_carbs,
-        'sugar': scaler_ingredient.sugar,
-        'dietary_fiber': scaler_ingredient.dietary_fiber,
-        'salt': scaler_ingredient.salt,
-        'sodium': scaler_ingredient.sodium,
-        'potassium': scaler_ingredient.potassium,
-        'copper': scaler_ingredient.copper,
-        'iron': scaler_ingredient.iron,
-        'magnesium': scaler_ingredient.magnesium,
-        'manganese': scaler_ingredient.manganese,
-        'zinc': scaler_ingredient.zinc,
-        'phosphorous': scaler_ingredient.phosphorous,
-        'sulphur': scaler_ingredient.sulphur,
-        'chloro': scaler_ingredient.chloro,
-        'fluoric': scaler_ingredient.fluoric,
-        'vitamin_b1': scaler_ingredient.vitamin_b1,
-        'vitamin_b12': scaler_ingredient.vitamin_b12,
-        'vitamin_b6': scaler_ingredient.vitamin_b6,
-        'vitamin_c': scaler_ingredient.vitamin_c,
-        'vitamin_d': scaler_ingredient.vitamin_d,
-        'vitamin_e': scaler_ingredient.vitamin_e
+        'reference_amount': food.reference_amount
     }
+    for element in ['calories', 'total_fat', 'saturated_fat', 'cholesterol', 'protein', 'total_carbs', 'sugar',
+                    'dietary_fiber', 'salt', 'sodium', 'potassium', 'copper', 'iron', 'magnesium', 'manganese',
+                    'zinc', 'phosphorous', 'sulphur', 'chloro', 'fluoric',
+                    'vitamin_b1', 'vitamin_b12', 'vitamin_b6', 'vitamin_c', 'vitamin_d', 'vitamin_e']:
+        response_dict[element] = scaler_ingredient.__getattribute__(element)
     if type(food) is Recipe:
         response_dict['ingredients'] = []
         for ingredient in food.ingredients.all():
