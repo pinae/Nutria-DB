@@ -420,6 +420,8 @@ class Ingredient(models.Model):
             raise NoFoodException(f)
 
     def scale_to_amount(self, value):
+        if value is None:
+            return None
         return value / self.food.reference_amount * self.amount
 
     @property
