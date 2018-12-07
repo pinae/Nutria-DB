@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_8@=tgd$&8x%818&@_d1s-lo)afmx18nl$#tny!#=-=zc$smm='
+SECRET_KEY = os.getenv('NUTRIA_SECRET_KEY', '_8@=tgd$&8x%818&@_d1s-lo)afmx18nl$#tny!#=-=zc$smm=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('NUTRIA_DEBUG_MODE', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -79,10 +79,22 @@ WSGI_APPLICATION = 'nutriaDB.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv('NUTRIA_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('NUTRIA_DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
     }
 }
+e = os.getenv('NUTRIA_DB_USER')
+if e:
+    DATABASES['default']['USER'] = e
+e = os.getenv('NUTRIA_DB_PASSWORD')
+if e:
+    DATABASES['default']['PASSWORD'] = e
+e = os.getenv('NUTRIA_DB_HOST')
+if e:
+    DATABASES['default']['HOST'] = e
+e = os.getenv('NUTRIA_DB_PORT')
+if e:
+    DATABASES['default']['PORT'] = e
 
 
 # Password validation
@@ -107,9 +119,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = os.getenv('NUTRIA_LANGUAGE_CODE', 'de-de')
 
-TIME_ZONE = 'Europe/Berlin'
+TIME_ZONE = os.getenv('NUTRIA_TIME_ZONE', 'Europe/Berlin')
 
 USE_I18N = True
 
@@ -123,4 +135,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-JWT_SECRET = 'SrFbE63DV7xy0R01'
+STATIC_ROOT = '/var/www/static'
+
+JWT_SECRET = os.getenv('NUTRIA_JWT_SECRET', 'SrFbE63DV7xy0R01')

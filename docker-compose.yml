@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  nutria_db:
+    build: .
+    ports:
+     - "8080:80"
+    environment:
+     - NUTRIA_SECRET_KEY=tirnotaeronuadtirnDTNTORSOEDR78745289756Nrtiansetirnae
+     - NUTRIA_JWT_SECRET=iaOEtr45n8EesTOStr4dtdtr67eaOTRsq52aeos83OSrns672s7
+     - NUTRIA_DEBUG_MODE=True
+     - NUTRIA_DB_ENGINE=django.db.backends.mysql
+     - NUTRIA_DB_NAME=nutria
+     - NUTRIA_DB_USER=nutria
+     - NUTRIA_DB_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
+     - NUTRIA_DB_HOST=nutria_maria
+     - NUTRIA_DB_PORT=3306
+     - NUTRIA_LANGUAGE_CODE=de-de
+     - NUTRIA_TIME_ZONE=Europe/Berlin
+     - NUTRIA_SUPERUSER=pina
+     - NUTRIA_SUPERUSER_MAIL=pmk@ct.de
+     - NUTRIA_SUPERUSER_PASSWORD=1234Geheim
+    depends_on:
+     - nutria_maria
+  nutria_maria:
+    image: mariadb:10
+    volumes:
+     - ./nutriaMaria:/var/lib/mysql
+    environment:
+     - MYSQL_DATABASE=nutria
+     - MYSQL_USER=nutria
+     - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
+     - MYSQL_RANDOM_ROOT_PASSWORD=yes
