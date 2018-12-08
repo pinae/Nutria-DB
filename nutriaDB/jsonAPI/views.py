@@ -6,6 +6,7 @@ import json
 import re
 import jwt
 from backend.models import Product, Recipe, Category, Ingredient
+from backend.helpers import split_name
 from jsonAPI.helpers import convert_digits_to_bytes
 from nutriaDB.settings import JWT_SECRET
 
@@ -181,10 +182,7 @@ def save_food(request):
     if 'name' not in food_dict:
         return HttpResponseBadRequest('{"error": "Please supply at least a \'name\' for each food item."}',
                                       content_type="application/json")
-    mao = re.match("^\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*:\s*([\w \-\(\[\{\}\]\)\#\%\!\.\,\;\*]+)\s*$",
-                   food_dict['name'])
-    category = mao.groups()[0]
-    name_addition = mao.groups()[1]
+    category, name_addition = split_name(food_dict['name'])
     try:
         cat = Category.objects.get(name=category)
     except Category.DoesNotExist:
