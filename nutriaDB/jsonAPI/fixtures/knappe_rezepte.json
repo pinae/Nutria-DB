@@ -1,0 +1,40 @@
+[
+  {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Trockenfrüchte"
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Trockenfrüchte: Rosinen",
+      "reference_amount": 100,
+      "calories": 400
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Backware: Rosinenbrötchen"
+    },
+    "ingredients": [
+      {
+        "name": "Mehl: Weizenmehl Type 550",
+        "amount": 500
+      },
+      {
+        "name": "frische Backhefe",
+        "amount": 50
+      },
+      {
+        "name": "Speisesalz",
+        "amount": 10
+      },
+      {
+        "name": "Trockenfrüchte: Rosinen",
+        "amount": 200
+      }
+    ]
+  }
+]
