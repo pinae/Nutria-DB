@@ -24,6 +24,18 @@
     }
   },
   {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Spirituose"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Kuchen"
+    }
+  },
+  {
     "model": "backend.Product",
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
@@ -255,6 +267,138 @@
     }
   },
   {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Spirituose: Rum",
+      "reference_amount": 100,
+      "calories": 231.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 0.0,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 1.0,
+      "potassium": 2.0,
+      "copper": 0.068,
+      "iron": 0.12,
+      "magnesium": 0.0,
+      "manganese": 0.018,
+      "zinc": 0.06,
+      "phosphorous": 5.0,
+      "sulphur": 0.0,
+      "chloro": 0.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.01,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Gewürz: Zitronenschale",
+      "reference_amount": 100,
+      "calories": 89.0,
+      "total_fat": 0.3,
+      "saturated_fat": 0.07,
+      "cholesterol": 0.0,
+      "protein": 1.5,
+      "total_carbs": 16.0,
+      "sugar": 16.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.01,
+      "sodium": 6.0,
+      "potassium": 160.0,
+      "copper": 0.07,
+      "iron": 0.8,
+      "magnesium": 15.0,
+      "manganese": 20.0,
+      "zinc": 0.15,
+      "phosphorous": 12.0,
+      "sulphur": 9.0,
+      "chloro": 4.0,
+      "fluoric": 0.005,
+      "vitamin_b1": 0.06,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.18,
+      "vitamin_c": 129.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Mehl: Weizenmehl Type 405",
+      "reference_amount": 100,
+      "calories": 348,
+      "total_fat": 0.98,
+      "saturated_fat": 0.14,
+      "cholesterol": 0.0,
+      "protein": 10.04,
+      "total_carbs": 72.34,
+      "sugar": 0.73,
+      "dietary_fiber": 2.75,
+      "salt": 0.0,
+      "sodium": 1,
+      "potassium": 168,
+      "copper": 106,
+      "iron": 0.57,
+      "magnesium": 14,
+      "manganese": 0.395,
+      "zinc": 0.51,
+      "phosphorous": 62,
+      "sulphur": 100,
+      "chloro": 50,
+      "fluoric": 0.05,
+      "vitamin_b1": 0.1,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.04,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.18
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Kakaopulver",
+      "reference_amount": 100,
+      "calories": 390,
+      "total_fat": 19.8,
+      "saturated_fat": 12.45,
+      "cholesterol": 0.0,
+      "protein": 22.61,
+      "total_carbs": 17.83,
+      "sugar": 17.83,
+      "dietary_fiber": 26.32,
+      "salt": 0.03,
+      "sodium": 292.0,
+      "potassium": 3660.0,
+      "copper": 4.15,
+      "iron": 46.8,
+      "magnesium": 545.0,
+      "manganese": 4.92,
+      "zinc": 6.85,
+      "phosphorous": 729.0,
+      "sulphur": 262.0,
+      "chloro": 18.0,
+      "fluoric": 0.06,
+      "vitamin_b1": 0.12,
+      "vitamin_b12": 0.0012,
+      "vitamin_b6": 0.34,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 4.78
+    }
+  },
+  {
     "model": "backend.Recipe",
     "fields": {
       "name": "Backware: Rosinenbrötchen"
@@ -331,6 +475,54 @@
       {
         "name": "Sahnekaramellen",
         "amount": 270
+      }
+    ]
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Kuchen: Marmorkuchen"
+    },
+    "ingredients": [
+      {
+        "name": "Fett: Butter",
+        "amount": 200
+      },
+      {
+        "name": "Zucker weiß",
+        "amount": 280
+      },
+      {
+        "name": "Backpulver",
+        "amount": 8.5
+      },
+      {
+        "name": "Spirituose: Rum",
+        "amount": 16
+      },
+      {
+        "name": "Ei: Hühnerei",
+        "amount": 306
+      },
+      {
+        "name": "Zitronenschale",
+        "amount": 4
+      },
+      {
+        "name": "Speisesalz",
+        "amount": 6
+      },
+      {
+        "name": "Mehl: Weizenmehl Type 405",
+        "amount": 280
+      },
+      {
+        "name": "Kuhmilch 1,5% Fett",
+        "amount": 100
+      },
+      {
+        "name": "Kakaopulver",
+        "amount": 20
       }
     ]
   }
