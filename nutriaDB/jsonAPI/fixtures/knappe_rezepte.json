@@ -10,7 +10,32 @@
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
       "reference_amount": 100,
-      "calories": 400
+      "calories": 314.0,
+      "total_fat": 0.55,
+      "saturated_fat": 0.22,
+      "cholesterol": 0.0,
+      "protein": 2.46,
+      "total_carbs": 68.0,
+      "sugar": 67.1,
+      "dietary_fiber": 5.2,
+      "salt": 0.02,
+      "sodium": 21.0,
+      "potassium": 728.0,
+      "copper": 0.37,
+      "iron": 2.27,
+      "magnesium": 41.0,
+      "manganese": 0.464,
+      "zinc": 0.25,
+      "phosphorous": 110.0,
+      "sulphur": 23.0,
+      "chloro": 10.0,
+      "fluoric": 0.062,
+      "vitamin_b1": 0.12,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.11,
+      "vitamin_c": 1.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.6
     }
   },
   {
@@ -25,15 +50,23 @@
       },
       {
         "name": "frische Backhefe",
-        "amount": 50
+        "amount": 40
       },
       {
         "name": "Speisesalz",
-        "amount": 10
+        "amount": 5
       },
       {
         "name": "Trockenfrüchte: Rosinen",
         "amount": 200
+      },
+      {
+        "name": "Zucker weiß",
+        "amount": 50
+      },
+      {
+        "name": "Ei: Hühnerei",
+        "amount": 51
       }
     ]
   }

@@ -124,27 +124,38 @@ class Command(BaseCommand):
                                 if products.count() + recipes.count() == 0:
                                     print("Unable to find this ingredient: " + ing_data['name'])
                                 elif products.count() + recipes.count() > 1:
-                                    print("It's unclear which Product or Recipe was meant for this ingredient.")
-                                    print("There were these options:")
+                                    exact_match_found = False
                                     for p in products:
-                                        print("- " + str(p))
+                                        if str(p) == ing_data['name']:
+                                            food = p
+                                            exact_match_found = True
                                     for r in recipes:
-                                        print("- " + str(r))
-                                    print("Please change the 'name' so that only one of these is found.")
+                                        if str(r) == ing_data['name']:
+                                            food = r
+                                            exact_match_found = True
+                                    if not exact_match_found:
+                                        print("It's unclear which Product or Recipe was meant for this ingredient.")
+                                        print("There were these options:")
+                                        for p in products:
+                                            print("- " + str(p))
+                                        for r in recipes:
+                                            print("- " + str(r))
+                                        print("Please change the 'name' so that only one of these is found.")
+                                        continue
                                 else:
                                     if products.count() == 1:
                                         food = products.all()[0]
                                     else:
                                         food = recipes.all()[0]
-                                    try:
-                                        amount = float(ing_data['amount'])
-                                    except ValueError:
-                                        continue
-                                    new_ingredient = Ingredient(recipe=new_recipe, amount=amount)
-                                    new_ingredient.food = food
-                                    new_ingredient.save()
-                                    print("Added Ingredient: \"" + str(new_ingredient) +
-                                          "\" for Recipe: " + str(new_ingredient.recipe))
+                                try:
+                                    amount = float(ing_data['amount'])
+                                except ValueError:
+                                    continue
+                                new_ingredient = Ingredient(recipe=new_recipe, amount=amount)
+                                new_ingredient.food = food
+                                new_ingredient.save()
+                                print("Added Ingredient: \"" + str(new_ingredient) +
+                                      "\" for Recipe: " + str(new_ingredient.recipe))
                     if 'model' in data and data['model'] == 'backend.Ingredient' and 'fields' in data and \
                             'recipe' in data['fields'] and 'amount' in data['fields'] and \
                             ('food' in data['fields'] or
