@@ -6,6 +6,24 @@
     }
   },
   {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Fett"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Süßigkeit"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Keks"
+    }
+  },
+  {
     "model": "backend.Product",
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
@@ -39,6 +57,204 @@
     }
   },
   {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Backpulver",
+      "reference_amount": 100,
+      "calories": 175.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 5.2,
+      "total_carbs": 37.8,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.05,
+      "sodium": 11800.0,
+      "potassium": 49.0,
+      "copper": 0.001,
+      "iron": 0.0,
+      "magnesium": 9.0,
+      "manganese": 0.001,
+      "zinc": 2.8,
+      "phosphorous": 8430.0,
+      "sulphur": 50.0,
+      "chloro": 29.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Fett: Butter",
+      "reference_amount": 100,
+      "calories": 741.0,
+      "total_fat": 83.2,
+      "saturated_fat": 53.81,
+      "cholesterol": 221.0,
+      "protein": 0.67,
+      "total_carbs": 0.6,
+      "sugar": 0.6,
+      "dietary_fiber": 0.0,
+      "salt": 0.01,
+      "sodium": 5.0,
+      "potassium": 16.0,
+      "copper": 0.0,
+      "iron": 0.0,
+      "magnesium": 3.0,
+      "manganese": 0.0,
+      "zinc": 0.23,
+      "phosphorous": 21.0,
+      "sulphur": 9.0,
+      "chloro": 23.0,
+      "fluoric": 0.071,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.2,
+      "vitamin_d": 0.00124,
+      "vitamin_e": 2.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Zucker braun",
+      "reference_amount": 100,
+      "calories": 396.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 97.67,
+      "sugar": 97.67,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 2.0,
+      "potassium": 90.0,
+      "copper": 54.0,
+      "iron": 0.0,
+      "magnesium": 14.0,
+      "manganese": 0.02,
+      "zinc": 0.06,
+      "phosphorous": 24.0,
+      "sulphur": 14.0,
+      "chloro": 40.0,
+      "fluoric": 0.02,
+      "vitamin_b1": 0.01,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.7,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Puderzucker",
+      "reference_amount": 100,
+      "calories": 405.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 99.8,
+      "sugar": 99.8,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 0.0,
+      "potassium": 2.0,
+      "copper": 0.015,
+      "iron": 0.29,
+      "magnesium": 0.0,
+      "manganese": 0.01,
+      "zinc": 0.02,
+      "phosphorous": 0.0,
+      "sulphur": 0.0,
+      "chloro": 2.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Gewürz: Vanilleschote",
+      "reference_amount": 100,
+      "calories": 318.0,
+      "total_fat": 3.2,
+      "saturated_fat": 0.88,
+      "cholesterol": 0.0,
+      "protein": 3.9,
+      "total_carbs": 56.0,
+      "sugar": 55.44,
+      "dietary_fiber": 24.35,
+      "salt": 0.07,
+      "sodium": 26.0,
+      "potassium": 500.0,
+      "copper": 0.46,
+      "iron": 38.1,
+      "magnesium": 56.0,
+      "manganese": 5.7,
+      "zinc": 1.97,
+      "phosphorous": 61.0,
+      "sulphur": 100.0,
+      "chloro": 220.0,
+      "fluoric": 0.05,
+      "vitamin_b1": 0.08,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Süßigkeit: Sahnekaramellen",
+      "reference_amount": 100,
+      "calories": 357.0,
+      "total_fat": 3.75,
+      "saturated_fat": 2.25,
+      "cholesterol": 10.0,
+      "protein": 0.41,
+      "total_carbs": 79.29,
+      "sugar": 79.29,
+      "dietary_fiber": 0.0,
+      "salt": 0.04,
+      "sodium": 122.0,
+      "potassium": 119.0,
+      "copper": 0.047,
+      "iron": 0.79,
+      "magnesium": 6.0,
+      "manganese": 0.053,
+      "zinc": 0.04,
+      "phosphorous": 16.0,
+      "sulphur": 24.0,
+      "chloro": 27.0,
+      "fluoric": 0.036,
+      "vitamin_b1": 0.03,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.12,
+      "vitamin_d": 0.00013,
+      "vitamin_e": 0.08
+    }
+  },
+  {
     "model": "backend.Recipe",
     "fields": {
       "name": "Backware: Rosinenbrötchen"
@@ -67,6 +283,54 @@
       {
         "name": "Ei: Hühnerei",
         "amount": 51
+      }
+    ]
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Keks: Karamell-Salz-Cookie"
+    },
+    "ingredients": [
+      {
+        "name": "Mehl: Weizenmehl Type 550",
+        "amount": 350
+      },
+      {
+        "name": "Backpulver",
+        "amount": 4.25
+      },
+      {
+        "name": "Speisesalz",
+        "amount": 2.5
+      },
+      {
+        "name": "Fett: Butter",
+        "amount": 230
+      },
+      {
+        "name": "Zucker weiß",
+        "amount": 100
+      },
+      {
+        "name": "Zucker braun",
+        "amount": 155
+      },
+      {
+        "name": "Puderzucker",
+        "amount": 45
+      },
+      {
+        "name": "Ei: Hühnerei",
+        "amount": 51
+      },
+      {
+        "name": "Vanilleschote",
+        "amount": 10
+      },
+      {
+        "name": "Sahnekaramellen",
+        "amount": 270
       }
     ]
   }
