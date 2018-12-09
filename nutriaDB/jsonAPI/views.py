@@ -17,7 +17,7 @@ def index(request):
 
 def query_food(request):
     query_count = 15
-    if (request.method == 'GET' and 'ean' in request.GET) or (request.method == 'POST' and 'ean' in request.POST):
+    if request.method == 'GET' and 'ean' in request.GET:
         return query_ean(request)
     elif request.method == 'GET' and 'name' in request.GET:
         query_string = request.GET['name']
@@ -40,15 +40,23 @@ def query_food(request):
         else:
             product_chunk_start = 0
             recipe_chunk_start = 0
-    elif request.method == 'POST' and 'name' in request.POST:
-        query_string = request.POST['name']
-        if 'count' in request.POST:
+    elif request.method == 'POST':
+        data = json.loads(request.body)
+        if 'ean' in data:
+            return query_ean(request)
+        elif 'name' in data:
+            query_string = data['name']
+        else:
+            return HttpResponseBadRequest('{"error": "Your POST request needs to contain either a name of the food ' +
+                                          '(may be a part of it) or a ean. The params must be part of the JSON of ' +
+                                          'the message body."}', content_type="application/json")
+        if 'count' in data:
             try:
-                query_count = int(request.POST['count'])
+                query_count = int(data['count'])
             except ValueError:
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")
-        if 'chunk' in request.POST:
+        if 'chunk' in data:
             try:
                 product_chunk_start = int(request.POST['chunk'].split(':')[0])
                 recipe_chunk_start = int(request.POST['chunk'].split(':')[1])
@@ -104,14 +112,15 @@ def query_ean(request):
             except ValueError:
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")
-    elif request.method == 'POST' and 'ean' in request.POST:
-        query_ean = request.POST['ean']
+    elif request.method == 'POST':
+        data = json.loads(request.body)
+        query_ean = data['ean']
         if not re.search("^\d+$", query_ean):
             return HttpResponseBadRequest('{"error": "The ean must contain only digits."}',
                                           content_type="application/json")
-        if 'count' in request.POST:
+        if 'count' in data:
             try:
-                query_count = int(request.POST['count'])
+                query_count = int(data['count'])
             except ValueError:
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")

@@ -23,8 +23,29 @@ class QueryTests(TestCase):
         self.assertEqual(int(rc['food'][0][0]), 11)
         self.assertEqual(rc['food'][0][1], "Backware: Weizenbrötchen")
 
+    def testFlourQueryPost(self):
+        response = self.client.post('/json/find', data=json.dumps({
+            "name": "brö"
+        }), content_type="application/json")
+        rc = json.loads(response.content)
+        self.assertIn('food', rc)
+        self.assertGreaterEqual(len(rc['food']), 0)
+        self.assertEqual(int(rc['food'][0][0]), 11)
+        self.assertEqual(rc['food'][0][1], "Backware: Weizenbrötchen")
+
     def testFlourQueryWithCount(self):
         response = self.client.get('/json/find?name=brö&count=1')
+        rc = json.loads(response.content)
+        self.assertIn('food', rc)
+        self.assertGreaterEqual(len(rc['food']), 0)
+        self.assertEqual(int(rc['food'][0][0]), 11)
+        self.assertEqual(rc['food'][0][1], "Backware: Weizenbrötchen")
+
+    def testFlourQueryWithCountPost(self):
+        response = self.client.post('/json/find', data=json.dumps({
+            "name": "brö",
+            "count": 1
+        }), content_type="application/json")
         rc = json.loads(response.content)
         self.assertIn('food', rc)
         self.assertGreaterEqual(len(rc['food']), 0)
@@ -37,14 +58,38 @@ class QueryTests(TestCase):
         self.assertIn('food', rc)
         self.assertEqual(len(rc['food']), 0)
 
+    def testFlourQueryWithCount0Post(self):
+        response = self.client.post('/json/find', data=json.dumps({
+            "name": "brö",
+            "count": 0
+        }), content_type="application/json")
+        rc = json.loads(response.content)
+        self.assertIn('food', rc)
+        self.assertEqual(len(rc['food']), 0)
+
     def testNoParams(self):
         response = self.client.get('/json/find')
         rc = json.loads(response.content)
         self.assertNotIn('food', rc)
         self.assertIn('error', rc)
 
+    def testNoParamsPost(self):
+        response = self.client.post('/json/find', data="{}", content_type="application/json")
+        rc = json.loads(response.content)
+        self.assertNotIn('food', rc)
+        self.assertIn('error', rc)
+
     def testQueryCountNoInteger(self):
         response = self.client.get('/json/find?name=brö&count=a')
+        rc = json.loads(response.content)
+        self.assertNotIn('food', rc)
+        self.assertIn('error', rc)
+
+    def testQueryCountNoIntegerPost(self):
+        response = self.client.post('/json/find', data=json.dumps({
+            "name": "brö",
+            "count": "a"
+        }), content_type="application/json")
         rc = json.loads(response.content)
         self.assertNotIn('food', rc)
         self.assertIn('error', rc)
