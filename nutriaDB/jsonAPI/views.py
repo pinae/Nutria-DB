@@ -41,7 +41,11 @@ def query_food(request):
             product_chunk_start = 0
             recipe_chunk_start = 0
     elif request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                          content_type="application/json")
         if 'ean' in data:
             return query_ean(request)
         elif 'name' in data:
@@ -113,7 +117,11 @@ def query_ean(request):
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")
     elif request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                          content_type="application/json")
         query_ean = data['ean']
         if not re.search("^\d+$", query_ean):
             return HttpResponseBadRequest('{"error": "The ean must contain only digits."}',
@@ -133,6 +141,32 @@ def query_ean(request):
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products]
     }
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
+
+
+def details_nopath(request):
+    if request.method == "GET" and 'id' in request.GET:
+        if 'amount' in request.GET:
+            amount = request.GET['amount']
+        else:
+            amount = None
+        return details(request, id_str=request.GET['id'], amount=amount)
+    elif request.method == "POST":
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                          content_type="application/json")
+        if 'id' not in data:
+            return HttpResponseBadRequest('{"error": "You have to pass an id as a JSON param to get details."}',
+                                          content_type="application/json")
+        if 'amount' in data:
+            amount = data['amount']
+        else:
+            amount = None
+        return details(request, id_str=data['id'], amount=amount)
+    else:
+        return HttpResponseBadRequest('{"error": "You have to pass an id to get details."}',
+                                      content_type="application/json")
 
 
 def details(request, id_str, amount=None):
@@ -201,7 +235,11 @@ def save_food(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to save data via POST."}',
                                       content_type="application/json")
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                      content_type="application/json")
     if 'token' not in data or 'food' not in data:
         return HttpResponseBadRequest('{"error": "Please supply a \'token\' and the \'food\' to save."}',
                                       content_type="application/json")
@@ -303,7 +341,11 @@ def log_in(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to log in via POST."}',
                                       content_type="application/json")
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                      content_type="application/json")
     if 'username' not in data or 'password' not in data:
         return HttpResponseBadRequest('{"error": "Please supply a \'username\' and a \'password\'."}',
                                       content_type="application/json")
@@ -328,7 +370,11 @@ def register(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to register in via POST."}',
                                       content_type="application/json")
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                      content_type="application/json")
     if not all(k in data for k in ['username', 'password', 'first_name', 'last_name', 'email']):
         return HttpResponseBadRequest('{"error": "Please supply a \'username\', a \'password\', ' +
                                       'a \'first_name\', a \'last_name\' and a \'email\'."}',
