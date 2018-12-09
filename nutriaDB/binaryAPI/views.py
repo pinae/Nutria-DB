@@ -7,7 +7,7 @@ from jsonAPI.helpers import convert_digits_to_bytes
 def query_food(request):
     """
     The query call uses the following format:
-    If the first bit is 0 a ean encoded as an integer with 4 bytes has to follow.
+    If the first bit is 0 a ean encoded as an integer with 4 bytes (big-endian) has to follow.
     If the first bit is >0 it encodes the length of an utf-8 encoded query string.
     The next byte is a query_count.
     The last two bytes are the starting points for the chunks for products and recipes. 255 means -1. If a
