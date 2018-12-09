@@ -27,6 +27,19 @@ def query_food(request):
             except ValueError:
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")
+        if 'chunk' in request.GET:
+            try:
+                product_chunk_start = int(request.GET['chunk'].split(':')[0])
+                recipe_chunk_start = int(request.GET['chunk'].split(':')[1])
+            except ValueError:
+                return HttpResponseBadRequest('{"error": "The given chunk start does not consist of two integers. ' +
+                                              'Example: \"-1:20\""}', content_type="application/json")
+            except IndexError:
+                return HttpResponseBadRequest('{"error": "The chunk start must consist of two integers separated by ' +
+                                              '\":\".', content_type="application/json")
+        else:
+            product_chunk_start = 0
+            recipe_chunk_start = 0
     elif request.method == 'POST' and 'name' in request.POST:
         query_string = request.POST['name']
         if 'count' in request.POST:
@@ -35,19 +48,45 @@ def query_food(request):
             except ValueError:
                 return HttpResponseBadRequest('{"error": "The given count is not an integer."}',
                                               content_type="application/json")
+        if 'chunk' in request.POST:
+            try:
+                product_chunk_start = int(request.POST['chunk'].split(':')[0])
+                recipe_chunk_start = int(request.POST['chunk'].split(':')[1])
+            except ValueError:
+                return HttpResponseBadRequest('{"error": "The given chunk start does not consist of two integers. ' +
+                                              'Example: \"-1:20\""}', content_type="application/json")
+            except IndexError:
+                return HttpResponseBadRequest('{"error": "The chunk start must consist of two integers separated by ' +
+                                              '\":\".', content_type="application/json")
+        else:
+            product_chunk_start = 0
+            recipe_chunk_start = 0
     else:
         return HttpResponseBadRequest('{"error": "The request needs to contain either a name of the food ' +
                                       '(may be a part of it) or a ean. You can use GET or POST."}',
                                       content_type="application/json")
-    products = Product.objects.filter(Q(name_addition__icontains=query_string) |
-                                      Q(category__name__icontains=query_string)).\
-        prefetch_related('category').order_by('category__name', 'name_addition')[:query_count]
-    recipes = Recipe.objects.filter(Q(name_addition__icontains=query_string) |
-                                    Q(category__name__icontains=query_string)).\
-        prefetch_related('category').order_by('category__name', 'name_addition')[:query_count]
+    new_product_chunk_start = -1
+    products = []
+    if product_chunk_start >= 0:
+        products_query = Product.objects.filter(Q(name_addition__icontains=query_string) |
+                                                Q(category__name__icontains=query_string)).\
+            prefetch_related('category').order_by('category__name', 'name_addition')
+        if products_query.count() > query_count:
+            new_product_chunk_start = product_chunk_start + query_count
+        products = products_query[product_chunk_start:query_count]
+    new_recipe_chunk_start = -1
+    recipes = []
+    if recipe_chunk_start >= 0:
+        recipes_query = Recipe.objects.filter(Q(name_addition__icontains=query_string) |
+                                              Q(category__name__icontains=query_string)).\
+            prefetch_related('category').order_by('category__name', 'name_addition')
+        if recipes_query.count() > query_count:
+            new_recipe_chunk_start = recipe_chunk_start + query_count
+        recipes = recipes_query[recipe_chunk_start:query_count]
     response_dict = {
         'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
-                [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes]
+                [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes],
+        'chunk': "{0:d}:{1:d}".format(new_product_chunk_start, new_recipe_chunk_start)
     }
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
 
