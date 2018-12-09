@@ -17,7 +17,6 @@ class QueryTests(TestCase):
                                     (chr(10) + chr(0) + chr(0)).encode('latin'),
                                     content_type="application/octet_stream")
         rc = response.content
-        print(rc)
         self.assertEqual(1, rc[0])  # 1 result
         food_id = str(rc[2:2+rc[1]], encoding='latin')
         self.assertEqual('\x00\x01', food_id)
