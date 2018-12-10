@@ -528,3 +528,27 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(toast.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(toast.vitamin_d, 0.0019924, 5)
         self.assertAlmostEqual(toast.vitamin_e, 48.8558, 5)
+
+    def testDeleteProduct(self):
+        token = self.createUserAndGetToken()
+        response = self.client.post('/json/save', data=json.dumps({
+            "token": token,
+            "food": {
+                "name": "Mehl: Testmehl",
+                "reference_amount": 123,
+                "calories": 973,
+            }
+        }), content_type='application/json')
+        self.assertIn('success', json.loads(response.content))
+        mehl_cat = Category.objects.get(name="Mehl")
+        p = Product.objects.filter(category=mehl_cat, name_addition="Testmehl")[0]
+        self.assertEqual(str(p), "Mehl: Testmehl")
+        self.assertAlmostEqual(p.reference_amount, 123, 5)
+        self.assertAlmostEqual(p.calories, 973, 5)
+        response = self.client.post('/json/delete', data=json.dumps({
+            "token": token,
+            "id": "0" + str(p.pk)
+        }), content_type='application/json')
+        self.assertIn('success', json.loads(response.content))
+        p = Product.objects.filter(category=mehl_cat, name_addition="Testmehl")
+        self.assertEqual(p.count(), 0)

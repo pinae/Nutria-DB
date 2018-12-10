@@ -337,6 +337,63 @@ def save_food(request):
                                       content_type="application/json")
 
 
+def delete_food(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest('{"error": "You have to delete food via POST."}',
+                                      content_type="application/json")
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('{"error": "The body of your POST request is not valid JSON."}',
+                                      content_type="application/json")
+    if 'token' not in data or 'id' not in data:
+        return HttpResponseBadRequest('{"error": "Please supply a \'token\' and the \'id\' of the food ' +
+                                      'you want to delete."}', content_type="application/json")
+    try:
+        token_payload = jwt.decode(data['token'], JWT_SECRET, 'HS256')
+    except jwt.InvalidSignatureError:
+        return HttpResponseBadRequest('{"error": "Invalid signature of the authentication token."}',
+                                      content_type="application/json")
+    except jwt.ExpiredSignatureError:
+        return HttpResponseBadRequest('{"error": "This authentication token is expired. ' +
+                                      'Please log in again and get a new token."}',
+                                      content_type="application/json")
+    except jwt.InvalidTokenError:
+        return HttpResponseBadRequest('{"error": "Invalid authentication token."}',
+                                      content_type="application/json")
+    try:
+        user = User.objects.get(pk=token_payload['id'])
+    except User.DoesNotExist:
+        return HttpResponseBadRequest('{"error": "Could not find the user for this token. Was it deleted?"}',
+                                      content_type="application/json")
+    if not user:
+        return HttpResponseBadRequest('{"error": "Could not find the user with id=' +
+                                      token_payload['id'] + '. Was it deleted?"}',
+                                      content_type="application/json")
+    if data['id'][0] == '0':
+        try:
+            food = Product.objects.get(pk=int(data['id'][1:]))
+        except Product.DoesNotExist:
+            return HttpResponseBadRequest('{"error": "There is no product with the id ' + data['id'] + '."}',
+                                          content_type="application/json")
+    elif data['id'][1] == '1':
+        try:
+            food = Recipe.objects.get(pk=int(data['id'][1:]))
+        except Recipe.DoesNotExist:
+            return HttpResponseBadRequest('{"error": "There is no recipe with the id ' + data['id'] + '."}',
+                                          content_type="application/json")
+    else:
+        return HttpResponseBadRequest('{"error": "The id begins with ' + data['id'][0] +
+                                      ' which is an unknown type."}', content_type="application/json")
+    if food.author == user:
+        food.delete()
+        return HttpResponse('{"success": "The food with id ' + data['id'] + ' was successfully deleted."}',
+                            content_type="application/json")
+    else:
+        return HttpResponseBadRequest('{"error": "You can only delete food you added yourself."}',
+                                      content_type="application/json")
+
+
 def log_in(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('{"error": "You have to log in via POST."}',

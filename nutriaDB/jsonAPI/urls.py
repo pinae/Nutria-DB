@@ -9,5 +9,6 @@ urlpatterns = [
     path('food/<str:id_str>/<str:amount>', views.details, name='details_amount'),
     path('login', views.log_in, name='login'),
     path('register', views.register, name='register'),
-    path('save', views.save_food, name='save')
+    path('save', views.save_food, name='save'),
+    path('delete', views.delete_food, name='delete')
 ]
