@@ -19,5 +19,6 @@ from django.urls import include, path
 urlpatterns = [
     path('json/', include('jsonAPI.urls')),
     path('b/', include('binaryAPI.urls')),
+    path('openfoodfacts/', include('openfoodfacts.urls')),
     path('admin/', admin.site.urls),
 ]
