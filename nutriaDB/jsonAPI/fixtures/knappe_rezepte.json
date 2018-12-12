@@ -48,6 +48,12 @@
     }
   },
   {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Belegtes"
+    }
+  },
+  {
     "model": "backend.Product",
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
@@ -965,6 +971,34 @@
       {
         "name": "Kakaopulver",
         "amount": 20
+      }
+    ]
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Belegtes: Brötchen mit Avocado und Tomaten"
+    },
+    "ingredients": [
+      {
+        "name": "Fett: Butter",
+        "amount": 10
+      },
+      {
+        "name": "Gemüse: Avocado",
+        "amount": 93
+      },
+      {
+        "name": "Gemüse: Tomate rot",
+        "amount": 141
+      },
+      {
+        "name": "Weizenbrötchen",
+        "amount": 118
+      },
+      {
+        "name": "Speisesalz",
+        "amount": 8
       }
     ]
   }
