@@ -74,7 +74,7 @@ class Command(BaseCommand):
                         product_query = Product.objects.filter(category=category, name_addition=name_addition,
                                                                reference_amount=reference_amount, calories=calories)
                         save_new_product = False
-                        if product_query.count() == 1:
+                        if product_query.count() >= 1:
                             product = product_query[0]
                         else:
                             save_new_product = True
@@ -85,9 +85,7 @@ class Command(BaseCommand):
                             try:
                                 creation_date = datetime.strptime(fields['creation_date'],
                                                                   '%Y-%m-%d %H:%M:%S.%f%z')
-                                if product.creation_date != creation_date:
-                                    product = Product(category=category, name_addition=name_addition,
-                                                      author=pina, reference_amount=reference_amount, calories=calories)
+                                if product.creation_date is None or product.creation_date != creation_date:
                                     product.creation_date = creation_date
                                     save_new_product = True
                                 field_cache['creation_date'] = creation_date
@@ -102,6 +100,9 @@ class Command(BaseCommand):
                                     field_value = float(fields[k])
                                 except ValueError:
                                     continue
+                                if product.__getattribute__(k) is None:
+                                    product.__setattr__(k, field_value)
+                                    save_new_product = True
                                 if product.__getattribute__(k) != field_value:
                                     product = Product(category=category, name_addition=name_addition,
                                                       author=pina, reference_amount=reference_amount, calories=calories)
