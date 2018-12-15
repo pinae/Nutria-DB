@@ -54,6 +54,12 @@
     }
   },
   {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Joghurt"
+    }
+  },
+  {
     "model": "backend.Product",
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
