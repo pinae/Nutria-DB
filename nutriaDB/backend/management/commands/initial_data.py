@@ -10,7 +10,8 @@ import json
 
 
 class Command(BaseCommand):
-    def get_category_and_name_addition(self, fields, cat_table):
+    @staticmethod
+    def get_category_and_name_addition(fields, cat_table):
         if 'category' in fields and 'name_addition' in fields:
             category = None
             for c in cat_table:
@@ -41,7 +42,7 @@ class Command(BaseCommand):
             pina.set_password('1234Geheim')
             pina.save()
         paths = [os.path.join('jsonAPI', 'fixtures', filename)
-                     for filename in os.listdir(os.path.join('jsonAPI', 'fixtures'))]
+                 for filename in os.listdir(os.path.join('jsonAPI', 'fixtures'))]
         paths = sorted(paths)
         for file in paths:
             print("Loading data from {}.".format(file))
@@ -52,10 +53,13 @@ class Command(BaseCommand):
                 for data in json.loads(f.read()):
                     if 'model' in data and data['model'] == 'backend.Category' and \
                             'fields' in data and 'name' in data['fields']:
-                        new_category = Category(name=data['fields']['name'])
-                        new_category.save()
+                        try:
+                            category = Category.objects.get(name=data['fields']['name'])
+                        except Category.DoesNotExist:
+                            category = Category(name=data['fields']['name'])
+                            category.save()
                         if 'pk' in data:
-                            cat_table.append({'fixture_pk': data['pk'], 'real_category': new_category})
+                            cat_table.append({'fixture_pk': data['pk'], 'real_category': category})
                     if 'model' in data and data['model'] == 'backend.Product' and 'fields' in data and \
                             'reference_amount' in data['fields'] and 'calories' in data['fields']:
                         fields = data['fields']
@@ -67,12 +71,26 @@ class Command(BaseCommand):
                             calories = float(fields['calories'])
                         except ValueError:
                             continue
-                        new_product = Product(category=category, name_addition=name_addition,
+                        product_query = Product.objects.filter(category=category, name_addition=name_addition,
+                                                               reference_amount=reference_amount, calories=calories)
+                        save_new_product = False
+                        if product_query.count() == 1:
+                            product = product_query[0]
+                        else:
+                            save_new_product = True
+                            product = Product(category=category, name_addition=name_addition,
                                               author=pina, reference_amount=reference_amount, calories=calories)
+                        field_cache = {}
                         if 'creation_date' in fields:
                             try:
-                                new_product.creation_date = datetime.strptime(fields['creation_date'],
-                                                                              '%Y-%m-%d %H:%M:%S.%f%z')
+                                creation_date = datetime.strptime(fields['creation_date'],
+                                                                  '%Y-%m-%d %H:%M:%S.%f%z')
+                                if product.creation_date != creation_date:
+                                    product = Product(category=category, name_addition=name_addition,
+                                                      author=pina, reference_amount=reference_amount, calories=calories)
+                                    product.creation_date = creation_date
+                                    save_new_product = True
+                                field_cache['creation_date'] = creation_date
                             except ValueError:
                                 pass
                         for k in ["total_fat", "saturated_fat", "cholesterol", "protein", "total_carbs", "sugar",
@@ -84,33 +102,52 @@ class Command(BaseCommand):
                                     field_value = float(fields[k])
                                 except ValueError:
                                     continue
-                                new_product.__setattr__(k, field_value)
-                        new_product.save()
-                        print("Adding Product: " + str(new_product))
+                                if product.__getattribute__(k) != field_value:
+                                    product = Product(category=category, name_addition=name_addition,
+                                                      author=pina, reference_amount=reference_amount, calories=calories)
+                                    product.__setattr__(k, field_value)
+                                    save_new_product = True
+                                field_cache[k] = field_value
+                        for k in field_cache.keys():
+                            product.__setattr__(k, field_cache[k])
+                        if save_new_product:
+                            product.save()
+                            print("Adding Product: " + str(product))
+                        else:
+                            print("Product " + str(product) + " is already up to date.")
                         if 'pk' in data:
-                            product_table.append({'fixture_pk': data['pk'], 'real_product': new_product})
+                            product_table.append({'fixture_pk': data['pk'], 'real_product': product})
                     if 'model' in data and data['model'] == 'backend.Recipe' and 'fields' in data:
                         fields = data['fields']
                         category, name_addition = self.get_category_and_name_addition(fields, cat_table)
                         if type(category) is not Category or type(name_addition) is not str:
                             continue
-                        new_recipe = Recipe(category=category, name_addition=name_addition, author=pina)
+                        creation_date = None
                         if 'creation_date' in fields:
                             try:
-                                new_recipe.creation_date = datetime.strptime(fields['creation_date'],
-                                                                             '%Y-%m-%d %H:%M:%S.%f%z')
+                                creation_date = datetime.strptime(fields['creation_date'],
+                                                                  '%Y-%m-%d %H:%M:%S.%f%z')
                             except ValueError:
                                 pass
-                        new_recipe.save()
-                        print("Adding empty Recipe: " + str(new_recipe))
+                        recipe_query = Recipe.objects.filter(category=category, name_addition=name_addition)
+                        if recipe_query.count() == 1:
+                            recipe = recipe_query[0]
+                            print("Found existing Recipe: " + str(recipe))
+                        else:
+                            recipe = Recipe(category=category, name_addition=name_addition, author=pina)
+                            if creation_date is not None:
+                                recipe.creation_date = creation_date
+                            recipe.save()
+                            print("Adding empty Recipe: " + str(recipe))
                         if 'pk' in data:
-                            recipe_table.append({'fixture_pk': data['pk'], 'real_recipe': new_recipe})
+                            recipe_table.append({'fixture_pk': data['pk'], 'real_recipe': recipe})
                         if 'ingredients' in data:
                             for ing_data in data['ingredients']:
                                 if 'name' not in ing_data or 'amount' not in ing_data:
                                     print("This ingredient needs a 'name' and an 'amount': " + str(ing_data))
                                     continue
                                 cat_str, name_add = split_name(ing_data['name'])
+                                food = None
                                 products = Product.objects.filter(Q(name_addition__icontains=ing_data['name']) |
                                                                   Q(category__name__icontains=ing_data['name']) |
                                                                   Q(category__name=cat_str,
@@ -151,11 +188,20 @@ class Command(BaseCommand):
                                     amount = float(ing_data['amount'])
                                 except ValueError:
                                     continue
-                                new_ingredient = Ingredient(recipe=new_recipe, amount=amount)
-                                new_ingredient.food = food
-                                new_ingredient.save()
-                                print("Added Ingredient: \"" + str(new_ingredient) +
-                                      "\" for Recipe: " + str(new_ingredient.recipe))
+                                ingredient_query = Ingredient.objects.filter(
+                                    recipe=recipe, amount=amount,
+                                    product=food if type(food) is Product else None,
+                                    food_is_recipe=food if type(food) is Recipe else None)
+                                if ingredient_query.count() == 1:
+                                    ingredient = ingredient_query[0]
+                                    print("Found existing Ingredient: \"" + str(ingredient) +
+                                          "\" for Recipe: " + str(ingredient.recipe))
+                                else:
+                                    ingredient = Ingredient(recipe=recipe, amount=amount)
+                                    ingredient.food = food
+                                    ingredient.save()
+                                    print("Added Ingredient: \"" + str(ingredient) +
+                                          "\" for Recipe: " + str(ingredient.recipe))
                     if 'model' in data and data['model'] == 'backend.Ingredient' and 'fields' in data and \
                             'recipe' in data['fields'] and 'amount' in data['fields'] and \
                             ('food' in data['fields'] or
@@ -188,8 +234,16 @@ class Command(BaseCommand):
                                     food = r['real_recipe']
                         if recipe is None or food is None:
                             continue
-                        new_ingredient = Ingredient(recipe=recipe, amount=amount)
-                        new_ingredient.food = food
-                        new_ingredient.save()
-                        print("Added Ingredient: \"" + str(new_ingredient) +
-                              "\" for Recipe: " + str(new_ingredient.recipe))
+                        ingredient_query = Ingredient.objects.filter(
+                            recipe=recipe, amount=amount,
+                            product=food if type(food) is Product else None,
+                            food_is_recipe=food if type(food) is Recipe else None)
+                        if ingredient_query.count() != 1:
+                            new_ingredient = Ingredient(recipe=recipe, amount=amount)
+                            new_ingredient.food = food
+                            new_ingredient.save()
+                            print("Added Ingredient: \"" + str(new_ingredient) +
+                                  "\" for Recipe: " + str(new_ingredient.recipe))
+                        else:
+                            print("Ingredient: \"" + str(ingredient_query[0]) +
+                                  "\" for Recipe: " + str(ingredient_query[0].recipe) + " was already in the database.")
