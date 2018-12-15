@@ -841,9 +841,41 @@
       "saturated_fat": 0,
       "total_carbs": 0,
       "sugar": 0,
-      "dietary_fiber": 7.9,
       "protein": 0.2,
       "salt": 0.01
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Joghurt: Fettarmer Joghurt Pfirsisch-Maracuja",
+      "manufacturer": "Milbona (Lidl)",
+      "ean": "20039349",
+      "reference_amount": 100,
+      "calories": 86,
+      "total_fat": 1.3,
+      "saturated_fat": 0.9,
+      "total_carbs": 14.3,
+      "sugar": 13.3,
+      "protein": 3.4,
+      "salt": 0.2
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Müsli: Früchte-Müsli",
+      "manufacturer": "Crownfield (Lidl)",
+      "ean": "20071943",
+      "reference_amount": 100,
+      "calories": 336,
+      "total_fat": 4.4,
+      "saturated_fat": 1.3,
+      "total_carbs": 61.4,
+      "sugar": 24.5,
+      "dietary_fiber": 9.3,
+      "protein": 8,
+      "salt": 0.1
     }
   },
   {
