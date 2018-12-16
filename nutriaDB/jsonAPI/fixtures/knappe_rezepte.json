@@ -90,6 +90,18 @@
     }
   },
   {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Milchprodukte"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "fields": {
+      "name": "Sirup"
+    }
+  },
+  {
     "model": "backend.Product",
     "fields": {
       "name": "Trockenfrüchte: Rosinen",
@@ -2039,6 +2051,72 @@
   {
     "model": "backend.Product",
     "fields": {
+      "name": "Milchprodukte: Schlagsahne 40% Fett",
+      "reference_amount": 100,
+      "calories": 358,
+      "total_fat": 38.1,
+      "saturated_fat": 23.11,
+      "cholesterol": 126.0,
+      "protein": 2.1,
+      "total_carbs": 3.1,
+      "sugar": 3.1,
+      "dietary_fiber": 0.0,
+      "salt": 0.08,
+      "sodium": 30,
+      "potassium": 95,
+      "copper": 0.018,
+      "iron": 0.06,
+      "magnesium": 7,
+      "manganese": 0.003,
+      "zinc": 0.27,
+      "phosphorous": 57,
+      "sulphur": 20,
+      "chloro": 59,
+      "fluoric": 0.01,
+      "vitamin_b1": 0.02,
+      "vitamin_b12": 0.0002,
+      "vitamin_b6": 0.03,
+      "vitamin_c": 0.8,
+      "vitamin_d": 0.0012,
+      "vitamin_e": 0.97
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Sirup: Zuckersirup",
+      "reference_amount": 100,
+      "calories": 322,
+      "total_fat": 0,
+      "saturated_fat": 0,
+      "cholesterol": 0.0,
+      "protein": 0.3,
+      "total_carbs": 79,
+      "sugar": 79,
+      "dietary_fiber": 0.0,
+      "salt": 0.07,
+      "sodium": 270,
+      "potassium": 240,
+      "copper": 0.09,
+      "iron": 1.5,
+      "magnesium": 10,
+      "manganese": 0.11,
+      "zinc": 0.01,
+      "phosphorous": 20,
+      "sulphur": 50,
+      "chloro": 42,
+      "fluoric": 0.08,
+      "vitamin_b1": 0.07,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
       "name": "Müsli: Knusper-Kokos-Müsli",
       "manufacturer": "Crownfield (Lidl)",
       "ean": "20503550",
@@ -2255,6 +2333,38 @@
       {
         "name": "Speisesalz",
         "amount": 8
+      }
+    ]
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Süßigkeit: Weiche Salz-Karamell-Bonbons"
+    },
+    "ingredients": [
+      {
+        "name": "Milchprodukte: Schlagsahne 40% Fett",
+        "amount": 360
+      },
+      {
+        "name": "Vanilleschote",
+        "amount": 3
+      },
+      {
+        "name": "Sirup: Zuckersirup",
+        "amount": 141
+      },
+      {
+        "name": "Zucker weiß",
+        "amount": 420
+      },
+      {
+        "name": "Fett: Butter",
+        "amount": 120
+      },
+      {
+        "name": "Speisesalz",
+        "amount": 3
       }
     ]
   }
