@@ -631,3 +631,29 @@ class Ingredient(models.Model):
     @vitamin_e.setter
     def vitamin_e(self, new_vitamin_e_value):
         self.amount = self.amount / self.vitamin_e * new_vitamin_e_value
+
+
+class Serving(models.Model):
+    name = models.CharField(max_length=256,
+                            help_text="Usually 'piece', 'slice', 'teaspoon', 'large glass' or 'handful'.")
+    size = models.FloatField(help_text="Size of the serving in g")
+    food_is_recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True, default=None,
+                                       related_name='servings')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, default=None,
+                                related_name='servings')
+
+    @property
+    def food(self):
+        if self.food_is_recipe:
+            return self.food_is_recipe
+        else:
+            return self.product
+
+    @food.setter
+    def food(self, f):
+        if type(f) is Recipe:
+            self.food_is_recipe = f
+        elif type(f) is Product:
+            self.product = f
+        else:
+            raise NoFoodException(f)
