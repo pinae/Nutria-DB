@@ -422,7 +422,11 @@ class SaveTests(TestCase):
                 "vitamin_b6": 0.04,
                 "vitamin_c": 0.0,
                 "vitamin_d": 0.0,
-                "vitamin_e": 0.18
+                "vitamin_e": 0.18,
+                "servings": [
+                    {"name": "Handvoll", "size": 300},
+                    {"name": "Paket", "size": 1000.0}
+                ]
             }
         }), content_type='application/json')
         self.assertIn('success', json.loads(response.content))
@@ -456,6 +460,11 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(p.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_d, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_e, 0.18, 5)
+        self.assertEqual(p.servings.count(), 2)
+        self.assertEqual(p.servings.all()[0].name, "Handvoll")
+        self.assertAlmostEqual(p.servings.all()[0].size, 300.0, 5)
+        self.assertEqual(p.servings.all()[1].name, "Paket")
+        self.assertAlmostEqual(p.servings.all()[1].size, 1000.0, 5)
 
     def testSaveRecipe(self):
         token = self.createUserAndGetToken()
@@ -505,6 +514,10 @@ class SaveTests(TestCase):
                     {'food': '06', 'amount': 10},
                     {'food': '02', 'amount': 21},
                     {'food': '05', 'amount': 68}
+                ],
+                "servings": [
+                    {"name": "ganzes Brot", "size": 634},
+                    {"name": "Scheibe", "size": 31.7}
                 ]
             }
         }), content_type='application/json')
@@ -539,6 +552,11 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(toast.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(toast.vitamin_d, 0.0019924, 5)
         self.assertAlmostEqual(toast.vitamin_e, 48.8558, 5)
+        self.assertEqual(toast.servings.count(), 2)
+        self.assertEqual(toast.servings.all()[0].name, "ganzes Brot")
+        self.assertAlmostEqual(toast.servings.all()[0].size, 634.0, 5)
+        self.assertEqual(toast.servings.all()[1].name, "Scheibe")
+        self.assertAlmostEqual(toast.servings.all()[1].size, 31.7, 5)
 
     def testDeleteProduct(self):
         token = self.createUserAndGetToken()
