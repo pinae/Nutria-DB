@@ -681,5 +681,14 @@
       "product": 9,
       "amount": 6.0
     }
+  },
+  {
+    "model": "backend.Serving",
+    "pk": 1,
+    "fields": {
+      "name": "mittelgroßes Ei",
+      "size": 51.0,
+      "product": 5
+    }
   }
 ]

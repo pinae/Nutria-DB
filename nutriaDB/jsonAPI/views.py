@@ -172,13 +172,13 @@ def details_nopath(request):
 def details(request, id_str, amount=None):
     if id_str[0] == '0':
         try:
-            food = Product.objects.get(pk=int(id_str[1:]))
+            food = Product.objects.filter(pk=int(id_str[1:])).prefetch_related('servings')[0]
         except Product.DoesNotExist:
             return HttpResponseBadRequest('{"error": "There is no product with the id ' + id_str + '."}',
                                           content_type="application/json")
     elif id_str[1] == '1':
         try:
-            food = Recipe.objects.get(pk=int(id_str[1:]))
+            food = Recipe.objects.filter(pk=int(id_str[1:])).prefetch_related('servings')[0]
         except Recipe.DoesNotExist:
             return HttpResponseBadRequest('{"error": "There is no recipe with the id ' + id_str + '."}',
                                           content_type="application/json")
@@ -204,7 +204,8 @@ def details(request, id_str, amount=None):
         'author': author_name,
         'creation_date': str(food.creation_date),
         'manufacturer': str(food.manufacturer) if type(food) is Product else author_name,
-        'reference_amount': food.reference_amount
+        'reference_amount': food.reference_amount,
+        'servings': [{'name': s.name, 'size': s.size} for s in food.servings.all()]
     }
     for element in ['calories', 'total_fat', 'saturated_fat', 'cholesterol', 'protein', 'total_carbs', 'sugar',
                     'dietary_fiber', 'salt', 'sodium', 'potassium', 'copper', 'iron', 'magnesium', 'manganese',

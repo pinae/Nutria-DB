@@ -130,6 +130,10 @@ class QueryTests(TestCase):
         }
         for k in egg_values.keys():
             self.assertAlmostEqual(rc[k], egg_values[k], 5)
+        self.assertIn('servings', rc)
+        self.assertEqual(len(rc['servings']), 1)
+        self.assertEqual(rc['servings'][0]['name'], "mittelgroßes Ei")
+        self.assertAlmostEqual(rc['servings'][0]['size'], 51.0, 5)
 
     def testProductDetailsPost(self):
         response = self.client.post('/json/food', data=json.dumps({
@@ -169,6 +173,10 @@ class QueryTests(TestCase):
         }
         for k in egg_values.keys():
             self.assertAlmostEqual(rc[k], egg_values[k], 5)
+        self.assertIn('servings', rc)
+        self.assertEqual(len(rc['servings']), 1)
+        self.assertEqual(rc['servings'][0]['name'], "mittelgroßes Ei")
+        self.assertAlmostEqual(rc['servings'][0]['size'], 51.0, 5)
 
     def testRecipeDetails(self):
         response = self.client.get('/json/food/11')
@@ -218,6 +226,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
     def testRecipeDetailsScaled(self):
         response = self.client.get('/json/food/11/52.8')
@@ -267,6 +276,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
     def testRecipeDetailsScaledPost(self):
         response = self.client.post('/json/food', data=json.dumps({
@@ -319,6 +329,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
 
 class UserTests(TestCase):
