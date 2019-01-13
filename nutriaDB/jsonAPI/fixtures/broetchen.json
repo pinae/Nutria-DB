@@ -1,11 +1,11 @@
 [
   {
     "model": "auth.user",
-      "pk": 1,
-      "fields": {
-        "username": "user1",
-        "password": "password"
-      }
+    "pk": 1,
+    "fields": {
+      "username": "user1",
+      "password": "password"
+    }
   },
   {
     "model": "backend.Category",
