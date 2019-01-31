@@ -4,6 +4,7 @@ import json
 import jwt
 from nutriaDB.settings import JWT_SECRET
 from backend.models import Category, Product, Recipe
+from .helpers import convert_digits_to_bytes, NoDigitError
 
 
 class QueryTests(TestCase):
@@ -552,3 +553,20 @@ class SaveTests(TestCase):
         self.assertIn('success', json.loads(response.content))
         p = Product.objects.filter(category=mehl_cat, name_addition="Testmehl")
         self.assertEqual(p.count(), 0)
+
+
+class HelperTests(TestCase):
+    def testConvertDigitsToBytes(self):
+        self.assertEqual(b'\x00', convert_digits_to_bytes("0"))
+        self.assertEqual(b'\x01', convert_digits_to_bytes("1"))
+        self.assertEqual(b'\x02', convert_digits_to_bytes("2"))
+        self.assertEqual(b'\x03', convert_digits_to_bytes("3"))
+        self.assertEqual(b'\x04', convert_digits_to_bytes("4"))
+        self.assertEqual(b'\x05', convert_digits_to_bytes("5"))
+        self.assertEqual(b'\x06', convert_digits_to_bytes("6"))
+        self.assertEqual(b'\x07', convert_digits_to_bytes("7"))
+        self.assertEqual(b'\x08', convert_digits_to_bytes("8"))
+        self.assertEqual(b'\x09', convert_digits_to_bytes("9"))
+        self.assertEqual(b'\x00\x01\x02\x09', convert_digits_to_bytes("0129"))
+        self.assertEqual(b'', convert_digits_to_bytes(""))
+        self.assertRaises(NoDigitError, convert_digits_to_bytes, "01a")

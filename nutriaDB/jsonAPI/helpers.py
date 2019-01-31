@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
+class NoDigitError(ValueError):
+    pass
+
+
 def convert_digits_to_bytes(digits):
     conversion_table = {
         "0": b'\x00',
@@ -16,5 +20,8 @@ def convert_digits_to_bytes(digits):
     }
     byte_string = b""
     for digit in digits:
-        byte_string += conversion_table[digit]
+        try:
+            byte_string += conversion_table[digit]
+        except KeyError:
+            raise NoDigitError(digit)
     return byte_string
