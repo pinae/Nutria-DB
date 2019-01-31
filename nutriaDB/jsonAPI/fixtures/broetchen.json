@@ -1,11 +1,11 @@
 [
   {
     "model": "auth.user",
-      "pk": 1,
-      "fields": {
-        "username": "user1",
-        "password": "password"
-      }
+    "pk": 1,
+    "fields": {
+      "username": "user1",
+      "password": "password"
+    }
   },
   {
     "model": "backend.Category",
@@ -680,6 +680,15 @@
       "recipe": 3,
       "product": 9,
       "amount": 6.0
+    }
+  },
+  {
+    "model": "backend.Serving",
+    "pk": 1,
+    "fields": {
+      "name": "mittelgroßes Ei",
+      "size": 51.0,
+      "product": 5
     }
   }
 ]

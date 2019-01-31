@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import re
 import jwt
-from backend.models import Product, Recipe, Category, Ingredient
+from backend.models import Product, Recipe, Category, Ingredient, Serving
 from backend.helpers import split_name
 from jsonAPI.helpers import convert_digits_to_bytes
 from nutriaDB.settings import JWT_SECRET
@@ -172,13 +172,13 @@ def details_nopath(request):
 def details(request, id_str, amount=None):
     if id_str[0] == '0':
         try:
-            food = Product.objects.get(pk=int(id_str[1:]))
+            food = Product.objects.filter(pk=int(id_str[1:])).prefetch_related('servings')[0]
         except Product.DoesNotExist:
             return HttpResponseBadRequest('{"error": "There is no product with the id ' + id_str + '."}',
                                           content_type="application/json")
     elif id_str[1] == '1':
         try:
-            food = Recipe.objects.get(pk=int(id_str[1:]))
+            food = Recipe.objects.filter(pk=int(id_str[1:])).prefetch_related('servings')[0]
         except Recipe.DoesNotExist:
             return HttpResponseBadRequest('{"error": "There is no recipe with the id ' + id_str + '."}',
                                           content_type="application/json")
@@ -204,7 +204,8 @@ def details(request, id_str, amount=None):
         'author': author_name,
         'creation_date': str(food.creation_date),
         'manufacturer': str(food.manufacturer) if type(food) is Product else author_name,
-        'reference_amount': food.reference_amount
+        'reference_amount': food.reference_amount,
+        'servings': [{'name': s.name, 'size': s.size} for s in food.servings.all()]
     }
     for element in ['calories', 'total_fat', 'saturated_fat', 'cholesterol', 'protein', 'total_carbs', 'sugar',
                     'dietary_fiber', 'salt', 'sodium', 'potassium', 'copper', 'iron', 'magnesium', 'manganese',
@@ -306,6 +307,24 @@ def save_food(request):
             i = Ingredient(recipe=food, amount=ingredient['amount'])
             i.food = ingredient['food']
             i.save()
+        if 'servings' in food_dict and len(food_dict['servings']) >= 1:
+            for serving in food_dict['servings']:
+                if 'name' in serving and type(serving['name']) is str and 'size' in serving:
+                    try:
+                        new_serving = Serving(name=serving['name'], size=float(serving['size']))
+                        new_serving.food = food
+                        new_serving.save()
+                    except ValueError:
+                        return HttpResponseBadRequest('{"error": "The recipe was saved but the serving ' +
+                                                      serving['name'] + ' could not be saved. ' +
+                                                      'This was because its size was not a number. ' +
+                                                      'All serving sizes must be a floats (in g)."}',
+                                                      content_type="application/json")
+                else:
+                    return HttpResponseBadRequest('{"error": "The recipe was saved but at least ' +
+                                                  'one serving could not be saved. ' +
+                                                  'Servings need a name (string) and a size in g."}',
+                                                  content_type="application/json")
         return HttpResponse('{"success": "Recipe successfully added."}', content_type="application/json")
     elif all(k in food_dict for k in ['calories', 'reference_amount']):
         try:
@@ -328,6 +347,23 @@ def save_food(request):
                     return HttpResponseBadRequest('{"error": "The amount of ' + element + ' must be a float."}',
                                                   content_type="application/json")
         food.save()
+        if 'servings' in food_dict and len(food_dict['servings']) >= 1:
+            for serving in food_dict['servings']:
+                if 'name' in serving and type(serving['name']) is str and 'size' in serving:
+                    try:
+                        new_serving = Serving(name=serving['name'], size=float(serving['size']), product=food)
+                        new_serving.save()
+                    except ValueError:
+                        return HttpResponseBadRequest('{"error": "The product was saved but the serving ' +
+                                                      serving['name'] + ' could not be saved. ' +
+                                                      'This was because its size was not a number. ' +
+                                                      'All serving sizes must be a floats (in g)."}',
+                                                      content_type="application/json")
+                else:
+                    return HttpResponseBadRequest('{"error": "The product was saved but at least ' +
+                                                  'one serving could not be saved. ' +
+                                                  'Servings need a name (string) and a size in g."}',
+                                                  content_type="application/json")
         return HttpResponse('{"success": "Product successfully added."}', content_type="application/json")
     else:
         return HttpResponseBadRequest('{"error": "You supplied data for a product but it misses a reference ' +

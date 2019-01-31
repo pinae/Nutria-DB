@@ -131,6 +131,10 @@ class QueryTests(TestCase):
         }
         for k in egg_values.keys():
             self.assertAlmostEqual(rc[k], egg_values[k], 5)
+        self.assertIn('servings', rc)
+        self.assertEqual(len(rc['servings']), 1)
+        self.assertEqual(rc['servings'][0]['name'], "mittelgroßes Ei")
+        self.assertAlmostEqual(rc['servings'][0]['size'], 51.0, 5)
 
     def testProductDetailsPost(self):
         response = self.client.post('/json/food', data=json.dumps({
@@ -170,6 +174,10 @@ class QueryTests(TestCase):
         }
         for k in egg_values.keys():
             self.assertAlmostEqual(rc[k], egg_values[k], 5)
+        self.assertIn('servings', rc)
+        self.assertEqual(len(rc['servings']), 1)
+        self.assertEqual(rc['servings'][0]['name'], "mittelgroßes Ei")
+        self.assertAlmostEqual(rc['servings'][0]['size'], 51.0, 5)
 
     def testRecipeDetails(self):
         response = self.client.get('/json/food/11')
@@ -219,6 +227,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
     def testRecipeDetailsScaled(self):
         response = self.client.get('/json/food/11/52.8')
@@ -268,6 +277,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
     def testRecipeDetailsScaledPost(self):
         response = self.client.post('/json/food', data=json.dumps({
@@ -320,6 +330,7 @@ class QueryTests(TestCase):
             self.assertEqual(ing['name'], ingredient_list[i]['name'])
             self.assertAlmostEqual(ing['amount'], ingredient_list[i]['amount'], 5)
             self.assertAlmostEqual(ing['calories'], ingredient_list[i]['calories'], 5)
+        self.assertIn('servings', rc)
 
 
 class UserTests(TestCase):
@@ -412,7 +423,11 @@ class SaveTests(TestCase):
                 "vitamin_b6": 0.04,
                 "vitamin_c": 0.0,
                 "vitamin_d": 0.0,
-                "vitamin_e": 0.18
+                "vitamin_e": 0.18,
+                "servings": [
+                    {"name": "Handvoll", "size": 300},
+                    {"name": "Paket", "size": 1000.0}
+                ]
             }
         }), content_type='application/json')
         self.assertIn('success', json.loads(response.content))
@@ -446,6 +461,11 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(p.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_d, 0.0, 5)
         self.assertAlmostEqual(p.vitamin_e, 0.18, 5)
+        self.assertEqual(p.servings.count(), 2)
+        self.assertEqual(p.servings.all()[0].name, "Handvoll")
+        self.assertAlmostEqual(p.servings.all()[0].size, 300.0, 5)
+        self.assertEqual(p.servings.all()[1].name, "Paket")
+        self.assertAlmostEqual(p.servings.all()[1].size, 1000.0, 5)
 
     def testSaveRecipe(self):
         token = self.createUserAndGetToken()
@@ -495,6 +515,10 @@ class SaveTests(TestCase):
                     {'food': '06', 'amount': 10},
                     {'food': '02', 'amount': 21},
                     {'food': '05', 'amount': 68}
+                ],
+                "servings": [
+                    {"name": "ganzes Brot", "size": 634},
+                    {"name": "Scheibe", "size": 31.7}
                 ]
             }
         }), content_type='application/json')
@@ -529,6 +553,11 @@ class SaveTests(TestCase):
         self.assertAlmostEqual(toast.vitamin_c, 0.0, 5)
         self.assertAlmostEqual(toast.vitamin_d, 0.0019924, 5)
         self.assertAlmostEqual(toast.vitamin_e, 48.8558, 5)
+        self.assertEqual(toast.servings.count(), 2)
+        self.assertEqual(toast.servings.all()[0].name, "ganzes Brot")
+        self.assertAlmostEqual(toast.servings.all()[0].size, 634.0, 5)
+        self.assertEqual(toast.servings.all()[1].name, "Scheibe")
+        self.assertAlmostEqual(toast.servings.all()[1].size, 31.7, 5)
 
     def testDeleteProduct(self):
         token = self.createUserAndGetToken()
