@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from backend.models import Product, Recipe, Ingredient, Category, NoFoodException
+from backend.models import Product, Recipe, Ingredient, Category, Manufacturer, NoFoodException
 
 
 class ModelTests(TestCase):
@@ -103,3 +103,7 @@ class ModelTests(TestCase):
             a.save()
             i.__setattr__(prop, 10)
             self.assertAlmostEqual(i.amount, 200, 5)
+
+    def testPrintManufacturer(self):
+        m = Manufacturer(name="Crownfield (Lidl)")
+        self.assertEqual(str(m), "Crownfield (Lidl)")
