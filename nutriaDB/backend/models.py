@@ -438,7 +438,8 @@ class Ingredient(models.Model):
 
     @total_fat.setter
     def total_fat(self, new_total_fat_amount):
-        self.amount = self.amount / self.total_fat * new_total_fat_amount
+        if self.total_fat is not None:
+            self.amount = self.amount / self.total_fat * new_total_fat_amount
 
     @property
     def saturated_fat(self):
@@ -446,7 +447,8 @@ class Ingredient(models.Model):
 
     @saturated_fat.setter
     def saturated_fat(self, new_saturated_fat_amount):
-        self.amount = self.amount / self.saturated_fat * new_saturated_fat_amount
+        if self.saturated_fat is not None:
+            self.amount = self.amount / self.saturated_fat * new_saturated_fat_amount
 
     @property
     def cholesterol(self):
@@ -454,7 +456,8 @@ class Ingredient(models.Model):
 
     @cholesterol.setter
     def cholesterol(self, new_cholesterol_value):
-        self.amount = self.amount / self.cholesterol * new_cholesterol_value
+        if self.cholesterol is not None:
+            self.amount = self.amount / self.cholesterol * new_cholesterol_value
 
     @property
     def protein(self):
@@ -462,7 +465,8 @@ class Ingredient(models.Model):
 
     @protein.setter
     def protein(self, new_protein_value):
-        self.amount = self.amount / self.protein * new_protein_value
+        if self.protein is not None:
+            self.amount = self.amount / self.protein * new_protein_value
 
     @property
     def total_carbs(self):
@@ -470,7 +474,8 @@ class Ingredient(models.Model):
 
     @total_carbs.setter
     def total_carbs(self, new_total_carbs_value):
-        self.amount = self.amount / self.total_carbs * new_total_carbs_value
+        if self.total_carbs is not None:
+            self.amount = self.amount / self.total_carbs * new_total_carbs_value
 
     @property
     def sugar(self):
@@ -478,7 +483,8 @@ class Ingredient(models.Model):
 
     @sugar.setter
     def sugar(self, new_sugar_value):
-        self.amount = self.amount / self.sugar * new_sugar_value
+        if self.sugar is not None:
+            self.amount = self.amount / self.sugar * new_sugar_value
 
     @property
     def dietary_fiber(self):
@@ -486,7 +492,8 @@ class Ingredient(models.Model):
 
     @dietary_fiber.setter
     def dietary_fiber(self, new_dietary_fiber_value):
-        self.amount = self.amount / self.dietary_fiber * new_dietary_fiber_value
+        if self.dietary_fiber is not None:
+            self.amount = self.amount / self.dietary_fiber * new_dietary_fiber_value
 
     @property
     def salt(self):
@@ -494,7 +501,8 @@ class Ingredient(models.Model):
 
     @salt.setter
     def salt(self, new_salt_value):
-        self.amount = self.amount / self.salt * new_salt_value
+        if self.salt is not None:
+            self.amount = self.amount / self.salt * new_salt_value
 
     @property
     def sodium(self):
@@ -502,7 +510,8 @@ class Ingredient(models.Model):
 
     @sodium.setter
     def sodium(self, new_sodium_value):
-        self.amount = self.amount / self.sodium * new_sodium_value
+        if self.sodium is not None:
+            self.amount = self.amount / self.sodium * new_sodium_value
 
     @property
     def potassium(self):
@@ -510,7 +519,8 @@ class Ingredient(models.Model):
 
     @potassium.setter
     def potassium(self, new_potassium_value):
-        self.amount = self.amount / self.potassium * new_potassium_value
+        if self.potassium is not None:
+            self.amount = self.amount / self.potassium * new_potassium_value
 
     @property
     def copper(self):
@@ -518,7 +528,8 @@ class Ingredient(models.Model):
 
     @copper.setter
     def copper(self, new_copper_value):
-        self.amount = self.amount / self.copper * new_copper_value
+        if self.copper is not None:
+            self.amount = self.amount / self.copper * new_copper_value
 
     @property
     def iron(self):
@@ -526,7 +537,8 @@ class Ingredient(models.Model):
 
     @iron.setter
     def iron(self, new_iron_value):
-        self.amount = self.amount / self.iron * new_iron_value
+        if self.iron is not None:
+            self.amount = self.amount / self.iron * new_iron_value
 
     @property
     def magnesium(self):
@@ -534,7 +546,8 @@ class Ingredient(models.Model):
 
     @magnesium.setter
     def magnesium(self, new_magnesium_value):
-        self.amount = self.amount / self.iron * new_magnesium_value
+        if self.magnesium is not None:
+            self.amount = self.amount / self.iron * new_magnesium_value
 
     @property
     def manganese(self):
@@ -542,7 +555,8 @@ class Ingredient(models.Model):
 
     @manganese.setter
     def manganese(self, new_manganese_value):
-        self.amount = self.amount / self.manganese * new_manganese_value
+        if self.manganese is not None:
+            self.amount = self.amount / self.manganese * new_manganese_value
 
     @property
     def zinc(self):
@@ -550,7 +564,8 @@ class Ingredient(models.Model):
 
     @zinc.setter
     def zinc(self, new_zinc_value):
-        self.amount = self.amount / self.zinc * new_zinc_value
+        if self.zinc is not None:
+            self.amount = self.amount / self.zinc * new_zinc_value
 
     @property
     def phosphorous(self):
@@ -558,7 +573,8 @@ class Ingredient(models.Model):
 
     @phosphorous.setter
     def phosphorous(self, new_phosphorous_value):
-        self.amount = self.amount / self.phosphorous * new_phosphorous_value
+        if self.phosphorous is not None:
+            self.amount = self.amount / self.phosphorous * new_phosphorous_value
 
     @property
     def sulphur(self):
@@ -566,7 +582,8 @@ class Ingredient(models.Model):
 
     @sulphur.setter
     def sulphur(self, new_sulphur_value):
-        self.amount = self.amount / self.sulphur * new_sulphur_value
+        if self.sulphur is not None:
+            self.amount = self.amount / self.sulphur * new_sulphur_value
 
     @property
     def chloro(self):
@@ -574,7 +591,8 @@ class Ingredient(models.Model):
 
     @chloro.setter
     def chloro(self, new_chloro_value):
-        self.amount = self.amount / self.chloro * new_chloro_value
+        if self.chloro is not None:
+            self.amount = self.amount / self.chloro * new_chloro_value
 
     @property
     def fluoric(self):
@@ -582,7 +600,8 @@ class Ingredient(models.Model):
 
     @fluoric.setter
     def fluoric(self, new_fluoric_value):
-        self.amount = self.amount / self.fluoric * new_fluoric_value
+        if self.fluoric is not None:
+            self.amount = self.amount / self.fluoric * new_fluoric_value
 
     @property
     def vitamin_b1(self):
@@ -590,7 +609,8 @@ class Ingredient(models.Model):
 
     @vitamin_b1.setter
     def vitamin_b1(self, new_vitamin_b1_value):
-        self.amount = self.amount / self.vitamin_b1 * new_vitamin_b1_value
+        if self.vitamin_b1 is not None:
+            self.amount = self.amount / self.vitamin_b1 * new_vitamin_b1_value
 
     @property
     def vitamin_b12(self):
@@ -598,7 +618,8 @@ class Ingredient(models.Model):
 
     @vitamin_b12.setter
     def vitamin_b12(self, new_vitamin_b12_value):
-        self.amount = self.amount / self.vitamin_b12 * new_vitamin_b12_value
+        if self.vitamin_b12 is not None:
+            self.amount = self.amount / self.vitamin_b12 * new_vitamin_b12_value
 
     @property
     def vitamin_b6(self):
@@ -606,7 +627,8 @@ class Ingredient(models.Model):
 
     @vitamin_b6.setter
     def vitamin_b6(self, new_vitamin_b6_value):
-        self.amount = self.amount / self.vitamin_b6 * new_vitamin_b6_value
+        if self.vitamin_b6 is not None:
+            self.amount = self.amount / self.vitamin_b6 * new_vitamin_b6_value
 
     @property
     def vitamin_c(self):
@@ -614,7 +636,8 @@ class Ingredient(models.Model):
 
     @vitamin_c.setter
     def vitamin_c(self, new_vitamin_c_value):
-        self.amount = self.amount / self.vitamin_c * new_vitamin_c_value
+        if self.vitamin_c is not None:
+            self.amount = self.amount / self.vitamin_c * new_vitamin_c_value
 
     @property
     def vitamin_d(self):
@@ -622,7 +645,8 @@ class Ingredient(models.Model):
 
     @vitamin_d.setter
     def vitamin_d(self, new_vitamin_d_value):
-        self.amount = self.amount / self.vitamin_d * new_vitamin_d_value
+        if self.vitamin_d is not None:
+            self.amount = self.amount / self.vitamin_d * new_vitamin_d_value
 
     @property
     def vitamin_e(self):
@@ -630,7 +654,8 @@ class Ingredient(models.Model):
 
     @vitamin_e.setter
     def vitamin_e(self, new_vitamin_e_value):
-        self.amount = self.amount / self.vitamin_e * new_vitamin_e_value
+        if self.vitamin_e is not None:
+            self.amount = self.amount / self.vitamin_e * new_vitamin_e_value
 
 
 class Serving(models.Model):
