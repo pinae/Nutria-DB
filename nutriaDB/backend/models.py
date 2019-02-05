@@ -92,8 +92,9 @@ class Product(Food):
 class Recipe(Food):
     def adjust_ingredient_amounts(self, old_value, new_value):
         for i in Ingredient.objects.filter(recipe=self):
-            i.amount = i.amount/old_value*new_value
-            i.save()
+            if old_value is not None:
+                i.amount = i.amount/old_value*new_value
+                i.save()
 
     def get_ingredients(self):
         return Ingredient.objects.filter(recipe=self)
@@ -413,9 +414,11 @@ class Ingredient(models.Model):
     @food.setter
     def food(self, f):
         if type(f) is Recipe:
+            self.product = None
             self.food_is_recipe = f
         elif type(f) is Product:
             self.product = f
+            self.food_is_recipe = None
         else:
             raise NoFoodException(f)
 
@@ -677,8 +680,10 @@ class Serving(models.Model):
     @food.setter
     def food(self, f):
         if type(f) is Recipe:
+            self.product = None
             self.food_is_recipe = f
         elif type(f) is Product:
             self.product = f
+            self.food_is_recipe = None
         else:
             raise NoFoodException(f)
