@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from backend.models import Product, Recipe, Ingredient, Category, Manufacturer, Serving
 from backend.models import NoFoodException
+from backend.helpers import split_name
 
 
 class ModelTests(TestCase):
@@ -259,3 +260,13 @@ class ModelTests(TestCase):
         s.save()
         self.assertEqual(str(s.food), "test: a")
         self.assertIsNone(s.food_is_recipe)
+
+
+class HelpersTest(TestCase):
+    def testSplitName(self):
+        cat, name = split_name("Foo: Bar")
+        self.assertEqual(cat, "Foo")
+        self.assertEqual(name, "Bar")
+        cat, name = split_name("FooBar")
+        self.assertIsNone(cat)
+        self.assertEqual(name, "FooBar")
