@@ -3674,6 +3674,99 @@
   {
     "model": "backend.Product",
     "fields": {
+      "name": "Trockenfrüchte: getrocknete Cranberries",
+      "reference_amount": 100,
+      "calories": 319,
+      "total_fat": 0.34,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.53,
+      "total_carbs": 75.52,
+      "sugar": 67.46,
+      "dietary_fiber": 3.9,
+      "salt": 0.0,
+      "sodium": 15,
+      "potassium": 264,
+      "copper": 0.109,
+      "iron": 0.33,
+      "magnesium": 11,
+      "manganese": 0.188,
+      "zinc": 0,
+      "phosphorous": 18,
+      "sulphur": 0,
+      "chloro": 0,
+      "fluoric": 0.078,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.12,
+      "vitamin_c": 0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 1.16
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: getrocknete Kokosraspeln",
+      "reference_amount": 100,
+      "calories": 668,
+      "total_fat": 65.2,
+      "saturated_fat": 61.64,
+      "cholesterol": 0.0,
+      "protein": 7.38,
+      "total_carbs": 8.43,
+      "sugar": 6.57,
+      "dietary_fiber": 14.8,
+      "salt": 0.05,
+      "sodium": 20,
+      "potassium": 912,
+      "copper": 0.795,
+      "iron": 2.99,
+      "magnesium": 116,
+      "manganese": 2.13,
+      "zinc": 1.46,
+      "phosphorous": 194,
+      "sulphur": 0,
+      "chloro": 238,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.04,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.11,
+      "vitamin_c": 0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Konjakmehl",
+      "reference_amount": 100,
+      "calories": 40,
+      "total_fat": 0.15,
+      "protein": 3.2,
+      "total_carbs": 6.3,
+      "dietary_fiber": 4.1
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
+      "name": "Backzutat: Erythrit",
+      "reference_amount": 100,
+      "calories": 0,
+      "total_fat": 0,
+      "saturated_fat": 0,
+      "protein": 0,
+      "total_carbs": 0,
+      "sugar": 0,
+      "dietary_fiber": 0,
+      "salt": 0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "fields": {
       "name": "Müsli: Knusper-Kokos-Müsli",
       "manufacturer": "Crownfield (Lidl)",
       "ean": "20503550",
@@ -3922,6 +4015,63 @@
       {
         "name": "Speisesalz",
         "amount": 3
+      }
+    ]
+  },
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Süßigkeit: Kokos-Cranberry-Kekse mit Konjakmehl"
+    },
+    "ingredients": [
+      {
+        "name": "Backzutat: Konjakmehl",
+        "amount": 100
+      },
+      {
+        "name": "Trockenfrüchte: getrocknete Cranberries",
+        "amount": 100
+      },
+      {
+        "name": "Backzutat: Kokosraspeln",
+        "amount": 100
+      },
+      {
+        "name": "Ei: Hühnerei",
+        "amount": 171
+      },
+      {
+        "name": "Backzutat: Erythrit",
+        "amount": 250
+      },
+      {
+        "name": "Fett: Butter",
+        "amount": 150
+      },
+      {
+        "name": "Backzutat: Backpulver",
+        "amount": 8
+      }
+    ]
+  }
+  ,
+  {
+    "model": "backend.Recipe",
+    "fields": {
+      "name": "Backware: Konjakmehl-Eierpfannkuchen"
+    },
+    "ingredients": [
+      {
+        "name": "Backzutat: Konjakmehl",
+        "amount": 12
+      },
+      {
+        "name": "Ei: Hühnerei",
+        "amount": 114
+      },
+      {
+        "name": "Milch: Kuhmilch 1,5% Fett ultrahocherhitzt",
+        "amount": 50
       }
     ]
   }
