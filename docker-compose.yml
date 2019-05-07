@@ -9,7 +9,7 @@ services:
       - MYSQL_USER=nutria
       - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
-  nutria_db:
+  nutria:
     build: .
     volumes:
      - ./static:/usr/share/nginx/html
@@ -37,6 +37,6 @@ services:
      - ./dockersetup/nginx-app.conf:/etc/nginx/sites-enabled/default.conf:ro
      - ./static:/usr/share/nginx/html:ro
     depends_on:
-     - nutria_db
+     - nutria
     ports:
      - "127.0.0.1:8504:80"
