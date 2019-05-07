@@ -12,8 +12,8 @@ RUN apt-get update && \
 COPY requirements.txt /home/docker/requirements.txt
 COPY nutriaDB /var/www/
 COPY docker-setup/uwsgi-app.ini /etc/uwsgi/apps-enabled/uwsgi-app.ini
-COPY docker-setup/init_database.sh /home/docker/docker-entrypoint.sh
+COPY docker-setup/init_and_run.sh /home/docker/init_and_run.sh
 WORKDIR /home/docker/
 RUN pip3 install -r requirements.txt && pip3 install mysqlclient
 EXPOSE 3031
-CMD ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/apps-enabled/uwsgi-app.ini"]
+CMD ["/home/docker/init_and_run.sh"]

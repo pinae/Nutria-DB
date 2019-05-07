@@ -33,8 +33,7 @@ services:
   nutria_nginx:
     image: nginx:alpine
     volumes:
-     - ./dockersetup/nginx-app.conf:/etc/nginx/sites-available/default.conf:ro
-     - ./dockersetup/nginx-app.conf:/etc/nginx/sites-enabled/default.conf:ro
+     - ./docker-setup/nginx-app.conf:/etc/nginx/conf.d/default.conf:ro
      - ./static:/usr/share/nginx/html:ro
     depends_on:
      - nutria
