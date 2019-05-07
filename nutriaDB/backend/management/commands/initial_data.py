@@ -46,7 +46,7 @@ class Command(BaseCommand):
         paths = sorted(paths)
         for file in paths:
             print("Loading data from {}.".format(file))
-            with open(file) as f:
+            with open(file, 'r', encoding='utf-8') as f:
                 cat_table = []
                 product_table = []
                 recipe_table = []
