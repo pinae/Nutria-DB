@@ -1,9 +1,20 @@
 version: "3.7"
 services:
+  nutria_maria:
+    image: mariadb:10
+    volumes:
+      - ./nutriaMaria:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nutria
+      - MYSQL_USER=nutria
+      - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
   nutria_db:
     build: .
     ports:
      - "8080:80"
+    volumes:
+     - ./static:/usr/share/nginx/html
     environment:
      - NUTRIA_SECRET_KEY=tirnotaeronuadtirnDTNTORSOEDR78745289756Nrtiansetirnae
      - NUTRIA_JWT_SECRET=iaOEtr45n8EesTOStr4dtdtr67eaOTRsq52aeos83OSrns672s7
@@ -21,12 +32,13 @@ services:
      - NUTRIA_SUPERUSER_PASSWORD=1234Geheim
     depends_on:
      - nutria_maria
-  nutria_maria:
-    image: mariadb:10
+  nutria_nginx:
+    image: nginx:-alpine
     volumes:
-     - ./nutriaMaria:/var/lib/mysql
-    environment:
-     - MYSQL_DATABASE=nutria
-     - MYSQL_USER=nutria
-     - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
-     - MYSQL_RANDOM_ROOT_PASSWORD=yes
+     - ./dockersetup/nginx-app.conf:/etc/nginx/sites-available/default.conf:ro
+     - ./dockersetup/nginx-app.conf:/etc/nginx/sites-enabled/default.conf:ro
+     - ./static:/usr/share/nginx/html:ro
+    depends_on:
+     - nutria_db
+    ports:
+     - "127.0.0.1:8504:80"

@@ -15,8 +15,6 @@ COPY requirements.txt /home/docker/requirements.txt
 COPY nutriaDB /var/www/
 WORKDIR /home/docker/
 RUN pip3 install -r requirements.txt && pip3 install mysqlclient
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY docker-setup/nginx-app.conf /etc/nginx/sites-available/default
 COPY docker-setup/supervisor-app.conf /etc/supervisor/conf.d/
 COPY docker-setup/uwsgi-app.ini /etc/uwsgi/apps-enabled/uwsgi-app.ini
 COPY docker-setup/init_database.sh /home/docker/docker-entrypoint.sh
