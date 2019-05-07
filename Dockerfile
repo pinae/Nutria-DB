@@ -6,7 +6,7 @@ RUN apt-get update && \
 	python3-dev \
 	python3-setuptools \
 	python3-pip \
-	libmariadbclient-dev \
+	libmariadbclient-dev && \
 	pip3 install uwsgi && \
     rm -rf /var/lib/apt/lists/*
 COPY requirements.txt /home/docker/requirements.txt
