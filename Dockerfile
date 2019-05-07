@@ -1,5 +1,6 @@
 FROM debian
 ENV LANG C.UTF-8
+ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \

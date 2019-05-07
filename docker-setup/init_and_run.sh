@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-set -e
 cd /var/www
+python3 manage.py wait_for_db
 python3 manage.py migrate
 python3 manage.py collectstatic
 python3 manage.py initadmin
