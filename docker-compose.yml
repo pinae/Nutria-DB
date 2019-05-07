@@ -11,8 +11,6 @@ services:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
   nutria_db:
     build: .
-    ports:
-     - "8080:80"
     volumes:
      - ./static:/usr/share/nginx/html
     environment:
@@ -33,7 +31,7 @@ services:
     depends_on:
      - nutria_maria
   nutria_nginx:
-    image: nginx:-alpine
+    image: nginx:alpine
     volumes:
      - ./dockersetup/nginx-app.conf:/etc/nginx/sites-available/default.conf:ro
      - ./dockersetup/nginx-app.conf:/etc/nginx/sites-enabled/default.conf:ro
