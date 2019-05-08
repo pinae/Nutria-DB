@@ -9,6 +9,7 @@ services:
       - MYSQL_USER=nutria
       - MYSQL_PASSWORD=zbakhKStr543mT_OB/r}actiTSNHOT
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    restart: always
   nutria:
     build: .
     volumes:
@@ -30,6 +31,7 @@ services:
      - NUTRIA_SUPERUSER_PASSWORD=1234Geheim
     depends_on:
      - nutria_maria
+    restart: always
   nutria_nginx:
     image: nginx:alpine
     volumes:
@@ -39,3 +41,4 @@ services:
      - nutria
     ports:
      - "127.0.0.1:8504:80"
+    restart: always
