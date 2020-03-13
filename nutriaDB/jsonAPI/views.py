@@ -96,8 +96,22 @@ def query_food(request):
             new_recipe_chunk_start = recipe_chunk_start + query_count
         recipes = recipes_query[recipe_chunk_start:query_count]
     response_dict = {
-        'food': [('0{0:d}'.format(p.pk), p.category.name + ': ' + p.name_addition) for p in products] +
-                [('1{0:d}'.format(r.pk), r.category.name + ': ' + r.name_addition) for r in recipes],
+        'food': [('0{0:d}:{1:d}'.format(p.pk, p.category.pk),
+                  p.category.name,
+                  p.name_addition,
+                  p.manufacturer.name,
+                  '{0:.2f}'.format(p.reference_amount))
+                 for p in products] +
+                [('1{0:d}:{1:d}'.format(r.pk, r.category.pk),
+                  r.category.name,
+                  r.name_addition,
+                  "" if r.author is None else
+                  (r.author.first_name + r.author.last_name if
+                   (r.author.first_name is not None and r.author.last_name is not None) else
+                   (r.author.username if (r.author.first_name is None and r.author.last_name is None) else
+                    r.author.last_name if r.author.first_name is None else r.author.first_name)),
+                  '{0:.2f}'.format(r.reference_amount))
+                 for r in recipes],
         'chunk': "{0:d}:{1:d}".format(new_product_chunk_start, new_recipe_chunk_start)
     }
     return HttpResponse(json.dumps(response_dict), content_type="application/json")
