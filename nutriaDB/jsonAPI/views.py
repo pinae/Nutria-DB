@@ -99,7 +99,12 @@ def query_food(request):
         'food': [('0{0:d}:{1:d}'.format(p.pk, p.category.pk),
                   p.category.name,
                   p.name_addition,
-                  p.manufacturer.name,
+                  p.manufacturer.name if p.manufacturer is not None else
+                  ("" if p.author is None else
+                   (p.author.first_name + p.author.last_name if
+                    (p.author.first_name is not None and p.author.last_name is not None) else
+                    (p.author.username if (p.author.first_name is None and p.author.last_name is None) else
+                     p.author.last_name if p.author.first_name is None else p.author.first_name))),
                   '{0:.2f}'.format(p.reference_amount))
                  for p in products] +
                 [('1{0:d}:{1:d}'.format(r.pk, r.category.pk),
