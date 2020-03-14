@@ -105,7 +105,8 @@ def query_food(request):
                     (p.author.first_name is not None and p.author.last_name is not None) else
                     (p.author.username if (p.author.first_name is None and p.author.last_name is None) else
                      p.author.last_name if p.author.first_name is None else p.author.first_name))),
-                  '{0:.2f}'.format(p.reference_amount))
+                  '{0:.2f}'.format(p.reference_amount),
+                  '{0:.1f}'.format(p.calories))
                  for p in products] +
                 [('1{0:d}:{1:d}'.format(r.pk, r.category.pk),
                   r.category.name,
@@ -115,7 +116,8 @@ def query_food(request):
                    (r.author.first_name is not None and r.author.last_name is not None) else
                    (r.author.username if (r.author.first_name is None and r.author.last_name is None) else
                     r.author.last_name if r.author.first_name is None else r.author.first_name)),
-                  '{0:.2f}'.format(r.reference_amount))
+                  '{0:.2f}'.format(r.reference_amount),
+                  '{0:.1f}'.format(r.calories))
                  for r in recipes],
         'chunk': "{0:d}:{1:d}".format(new_product_chunk_start, new_recipe_chunk_start)
     }
