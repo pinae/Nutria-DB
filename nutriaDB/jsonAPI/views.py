@@ -95,6 +95,8 @@ def query_food(request):
         if recipes_query.count() > query_count:
             new_recipe_chunk_start = recipe_chunk_start + query_count
         recipes = recipes_query[recipe_chunk_start:query_count]
+    for recipe in recipes:
+        recipe.reference_amount = 100.
     response_dict = {
         'food': [('0{0:d}:{1:d}'.format(p.pk, p.category.pk),
                   p.category.name,
@@ -106,7 +108,8 @@ def query_food(request):
                     (p.author.username if (p.author.first_name is None and p.author.last_name is None) else
                      p.author.last_name if p.author.first_name is None else p.author.first_name))),
                   '{0:.2f}'.format(p.reference_amount),
-                  '{0:.1f}'.format(p.calories))
+                  '{0:.1f}'.format(p.calories),
+                  '-1' if p.ean is None else "".join([str(x - b"0"[0]) for x in list(p.ean)]))
                  for p in products] +
                 [('1{0:d}:{1:d}'.format(r.pk, r.category.pk),
                   r.category.name,
@@ -117,7 +120,8 @@ def query_food(request):
                    (r.author.username if (r.author.first_name is None and r.author.last_name is None) else
                     r.author.last_name if r.author.first_name is None else r.author.first_name)),
                   '{0:.2f}'.format(r.reference_amount),
-                  '{0:.1f}'.format(r.calories))
+                  '{0:.1f}'.format(r.calories),
+                  '-1')
                  for r in recipes],
         'chunk': "{0:d}:{1:d}".format(new_product_chunk_start, new_recipe_chunk_start)
     }
@@ -197,7 +201,7 @@ def details(request, id_str, amount=None):
         except Product.DoesNotExist:
             return HttpResponseBadRequest('{"error": "There is no product with the id ' + id_str + '."}',
                                           content_type="application/json")
-    elif id_str[1] == '1':
+    elif id_str[0] == '1':
         try:
             food = Recipe.objects.filter(pk=int(id_str[1:])).prefetch_related('servings')[0]
         except Recipe.DoesNotExist:
