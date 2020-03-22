@@ -225,10 +225,12 @@ def details(request, id_str, amount=None):
     else:
         author_name = None
     response_dict = {
+        'type': 1 if type(food) is Recipe else 0,
+        'id': food.pk,
+        'categoryId': food.category.pk,
         'name': str(food),
         'author': author_name,
         'creation_date': str(food.creation_date),
-        'manufacturer': str(food.manufacturer) if type(food) is Product else author_name,
         'reference_amount': food.reference_amount,
         'servings': [{'name': s.name, 'size': s.size} for s in food.servings.all()]
     }
@@ -237,6 +239,11 @@ def details(request, id_str, amount=None):
                     'zinc', 'phosphorous', 'sulphur', 'chloro', 'fluoric',
                     'vitamin_b1', 'vitamin_b12', 'vitamin_b6', 'vitamin_c', 'vitamin_d', 'vitamin_e']:
         response_dict[element] = scaler_ingredient.__getattribute__(element)
+    if type(food) is Product:
+        if food.manufacturer is not None:
+            response_dict['manufacturer'] = str(food.manufacturer)
+        if food.ean is not None:
+            response_dict['ean'] = "".join([str(x - b"0"[0]) for x in list(food.ean)])
     if type(food) is Recipe:
         response_dict['ingredients'] = []
         for ingredient in food.ingredients.all():
