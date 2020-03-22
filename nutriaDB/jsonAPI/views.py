@@ -226,7 +226,7 @@ def details(request, id_str, amount=None):
         author_name = None
     response_dict = {
         'type': 1 if type(food) is Recipe else 0,
-        'id': food.pk,
+        'foodId': food.pk,
         'categoryId': food.category.pk,
         'name': str(food),
         'author': author_name,
