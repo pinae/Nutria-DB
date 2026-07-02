@@ -1,1 +1,694 @@
-../../jsonAPI/fixtures/broetchen.json
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "user1",
+      "password": "password"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 1,
+    "fields": {
+      "name": "Mehl"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 2,
+    "fields": {
+      "name": "Backzutat"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 3,
+    "fields": {
+      "name": "Gewürz"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 4,
+    "fields": {
+      "name": "Backware"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 5,
+    "fields": {
+      "name": "Ei"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 6,
+    "fields": {
+      "name": "Öl"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 7,
+    "fields": {
+      "name": "Pasta"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 8,
+    "fields": {
+      "name": "Gemüse"
+    }
+  },
+  {
+    "model": "backend.Category",
+    "pk": 9,
+    "fields": {
+      "name": "Milch"
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name_addition": "Weizenmehl Type 550",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 352.0,
+      "total_fat": 1.13,
+      "saturated_fat": 0.17,
+      "cholesterol": 0.0,
+      "protein": 10.6,
+      "total_carbs": 72.0,
+      "sugar": 1.08,
+      "dietary_fiber": 3.5,
+      "salt": 0.0,
+      "sodium": 2.0,
+      "potassium": 150.0,
+      "copper": 0.14,
+      "iron": 1.0,
+      "magnesium": 23.0,
+      "manganese": 0.687,
+      "zinc": 0.78,
+      "phosphorous": 107.0,
+      "sulphur": 100.0,
+      "chloro": 50.0,
+      "fluoric": 50.0,
+      "vitamin_b1": 0.11,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.1,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.2
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 2,
+    "fields": {
+      "category": 2,
+      "name_addition": "frische Backhefe",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 328.0,
+      "total_fat": 1.2,
+      "saturated_fat": 0.2,
+      "cholesterol": 0.0,
+      "protein": 35.6,
+      "total_carbs": 32.0,
+      "sugar": 3.84,
+      "dietary_fiber": 21.0,
+      "salt": 0.13,
+      "sodium": 50.0,
+      "potassium": 2000.0,
+      "copper": 5000.0,
+      "iron": 20.0,
+      "magnesium": 230.0,
+      "manganese": 0.53,
+      "zinc": 8.0,
+      "phosphorous": 1290.0,
+      "sulphur": 300.0,
+      "chloro": 350.0,
+      "fluoric": 0.2,
+      "vitamin_b1": 2.33,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 2.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.3
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 3,
+    "fields": {
+      "category": 3,
+      "name_addition": "Speisesalz",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 0.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 0.0,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 98.71,
+      "sodium": 38850.0,
+      "potassium": 4.0,
+      "copper": 0.1,
+      "iron": 0.1,
+      "magnesium": 120.0,
+      "manganese": 0.2,
+      "zinc": 0.05,
+      "phosphorous": 150.0,
+      "sulphur": 23.0,
+      "chloro": 59900,
+      "fluoric": 50.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 4,
+    "fields": {
+      "category": 2,
+      "name_addition": "Biomalz",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 282.0,
+      "total_fat": 1.0,
+      "saturated_fat": 0.18,
+      "cholesterol": 0.0,
+      "protein": 4.0,
+      "total_carbs": 63.0,
+      "sugar": 63.0,
+      "dietary_fiber": 0.5,
+      "salt": 0.0,
+      "sodium": 80.0,
+      "potassium": 230.0,
+      "copper": 0.2,
+      "iron": 8.7,
+      "magnesium": 100.0,
+      "manganese": 1.5,
+      "zinc": 2.0,
+      "phosphorous": 300.0,
+      "sulphur": 110.0,
+      "chloro": 20.0,
+      "fluoric": 0.1,
+      "vitamin_b1": 3.6,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.6,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 5,
+    "fields": {
+      "category": 5,
+      "name_addition": "Hühnerei",
+      "author": 1,
+      "creation_date": "2018-12-05 14:00:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 137.0,
+      "total_fat": 9.32,
+      "saturated_fat": 2.71,
+      "cholesterol": 396.0,
+      "protein": 11.85,
+      "total_carbs": 1.53,
+      "sugar": 1.53,
+      "dietary_fiber": 0.0,
+      "salt": 0.3,
+      "sodium": 144.0,
+      "potassium": 147.0,
+      "copper": 65.0,
+      "iron": 1.83,
+      "magnesium": 11.0,
+      "manganese": 0.071,
+      "zinc": 1.49,
+      "phosphorous": 210.0,
+      "sulphur": 180.0,
+      "chloro": 180.0,
+      "fluoric": 0.11,
+      "vitamin_b1": 0.1,
+      "vitamin_b12": 0.0019,
+      "vitamin_b6": 0.08,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.00293,
+      "vitamin_e": 1.96
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 6,
+    "fields": {
+      "category": 2,
+      "name_addition": "Zucker weiß",
+      "author": 1,
+      "creation_date": "2018-12-05 14:08:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 405.0,
+      "total_fat": 0.0,
+      "saturated_fat": 0.0,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 99.8,
+      "sugar": 99.8,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 0.0,
+      "potassium": 2.0,
+      "copper": 0.015,
+      "iron": 0.29,
+      "magnesium": 0.0,
+      "manganese": 0.01,
+      "zinc": 0.02,
+      "phosphorous": 0.0,
+      "sulphur": 0.0,
+      "chloro": 2.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 0.0
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 7,
+    "fields": {
+      "category": 6,
+      "name_addition": "Sonneblumenöl",
+      "author": 1,
+      "creation_date": "2018-12-05 14:08:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 884.0,
+      "total_fat": 100.0,
+      "saturated_fat": 10.68,
+      "cholesterol": 0.0,
+      "protein": 0.0,
+      "total_carbs": 0.0,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 1.0,
+      "potassium": 1.0,
+      "copper": 0.001,
+      "iron": 0.07,
+      "magnesium": 0.0,
+      "manganese": 0.0,
+      "zinc": 0.05,
+      "phosphorous": 0.0,
+      "sulphur": 0.0,
+      "chloro": 1.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 62.2
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 8,
+    "fields": {
+      "category": 5,
+      "name_addition": "Hühnerei Eigelb roh",
+      "author": 1,
+      "creation_date": "2018-12-06 23:23:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 348.0,
+      "total_fat": 31.9,
+      "saturated_fat": 9.41,
+      "cholesterol": 1260.0,
+      "protein": 16.10,
+      "total_carbs": 0.3,
+      "sugar": 0.21,
+      "dietary_fiber": 0.0,
+      "salt": 0.13,
+      "sodium": 51.0,
+      "potassium": 138.0,
+      "copper": 0.35,
+      "iron": 7.2,
+      "magnesium": 16.0,
+      "manganese": 0.125,
+      "zinc": 3.8,
+      "phosphorous": 590.0,
+      "sulphur": 170.0,
+      "chloro": 180.0,
+      "fluoric": 0.03,
+      "vitamin_b1": 0.29,
+      "vitamin_b12": 0.002,
+      "vitamin_b6": 0.3,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.00558,
+      "vitamin_e": 5.5
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 9,
+    "fields": {
+      "category": 6,
+      "name_addition": "Olivenöl",
+      "author": 1,
+      "creation_date": "2018-12-06 23:28:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 884.0,
+      "total_fat": 100.0,
+      "saturated_fat": 14.38,
+      "cholesterol": 1.0,
+      "protein": 0.0,
+      "total_carbs": 0.2,
+      "sugar": 0.0,
+      "dietary_fiber": 0.0,
+      "salt": 0.0,
+      "sodium": 1.0,
+      "potassium": 1.0,
+      "copper": 0.005,
+      "iron": 0.13,
+      "magnesium": 1.0,
+      "manganese": 0.001,
+      "zinc": 0.05,
+      "phosphorous": 2.0,
+      "sulphur": 0.0,
+      "chloro": 100.0,
+      "fluoric": 0.0,
+      "vitamin_b1": 0.0,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.0,
+      "vitamin_c": 0.0,
+      "vitamin_d": 0.0,
+      "vitamin_e": 11.91
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 10,
+    "fields": {
+      "category": 8,
+      "name_addition": "Champignons gedünstet",
+      "author": 1,
+      "creation_date": "2018-12-06 23:42:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 100.0,
+      "total_fat": 6.57,
+      "saturated_fat": 4.02,
+      "cholesterol": 17.0,
+      "protein": 4.28,
+      "total_carbs": 4.17,
+      "sugar": 0.75,
+      "dietary_fiber": 1.93,
+      "salt": 0.32,
+      "sodium": 127.0,
+      "potassium": 336.0,
+      "copper": 0.336,
+      "iron": 1.0,
+      "magnesium": 15.0,
+      "manganese": 0.113,
+      "zinc": 0.51,
+      "phosphorous": 122.0,
+      "sulphur": 42.0,
+      "chloro": 290.0,
+      "fluoric": 0.028,
+      "vitamin_b1": 0.08,
+      "vitamin_b12": 0.0,
+      "vitamin_b6": 0.06,
+      "vitamin_c": 6.48,
+      "vitamin_d": 0.00189,
+      "vitamin_e": 0.28
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 11,
+    "fields": {
+      "category": 9,
+      "name_addition": "Kuhmilch 1,5% Fett ultrahocherhitzt",
+      "author": 1,
+      "creation_date": "2018-12-06 23:49:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 48.0,
+      "total_fat": 1.6,
+      "saturated_fat": 1.08,
+      "cholesterol": 4.0,
+      "protein": 3.39,
+      "total_carbs": 4.8,
+      "sugar": 4.8,
+      "dietary_fiber": 0.0,
+      "salt": 0.12,
+      "sodium": 47.0,
+      "potassium": 155.0,
+      "copper": 0.01,
+      "iron": 0.05,
+      "magnesium": 12.0,
+      "manganese": 0.002,
+      "zinc": 0.43,
+      "phosphorous": 91.0,
+      "sulphur": 31.0,
+      "chloro": 101.0,
+      "fluoric": 0.017,
+      "vitamin_b1": 0.04,
+      "vitamin_b12": 0.0004,
+      "vitamin_b6": 0.05,
+      "vitamin_c": 1.7,
+      "vitamin_d": 0.00003,
+      "vitamin_e": 0.04
+    }
+  },
+  {
+    "model": "backend.Product",
+    "pk": 12,
+    "fields": {
+      "category": 9,
+      "name_addition": "Sahne 30% Fett",
+      "author": 1,
+      "creation_date": "2018-12-06 23:55:12.932332+00:00",
+      "manufacturer": null,
+      "reference_amount": 100.0,
+      "calories": 303.0,
+      "total_fat": 31.7,
+      "saturated_fat": 19.0,
+      "cholesterol": 84.0,
+      "protein": 2.36,
+      "total_carbs": 3.27,
+      "sugar": 3.27,
+      "dietary_fiber": 0.0,
+      "salt": 0.09,
+      "sodium": 34.0,
+      "potassium": 112.0,
+      "copper": 0.006,
+      "iron": 0.03,
+      "magnesium": 10.0,
+      "manganese": 0.002,
+      "zinc": 0.26,
+      "phosphorous": 63.0,
+      "sulphur": 20.0,
+      "chloro": 69.0,
+      "fluoric": 0.012,
+      "vitamin_b1": 0.03,
+      "vitamin_b12": 0.0004,
+      "vitamin_b6": 0.04,
+      "vitamin_c": 1.0,
+      "vitamin_d": 0.0011,
+      "vitamin_e": 0.71
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 1,
+    "fields": {
+      "category": 4,
+      "name_addition": "Weizenbrötchen",
+      "author": 1,
+      "creation_date": "2018-12-04 14:53:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 2,
+    "fields": {
+      "category": 4,
+      "name_addition": "Toastbrot soft",
+      "author": 1,
+      "creation_date": "2018-12-05 14:13:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Recipe",
+    "pk": 3,
+    "fields": {
+      "category": 7,
+      "name_addition": "Bandnudeln selbstgemacht",
+      "author": 1,
+      "creation_date": "2018-12-06 23:30:12.932332+00:00"
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 1,
+    "fields": {
+      "recipe": 1,
+      "product": 1,
+      "amount": 500.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 2,
+    "fields": {
+      "recipe": 1,
+      "product": 2,
+      "amount": 15.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 3,
+    "fields": {
+      "recipe": 1,
+      "product": 3,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 4,
+    "fields": {
+      "recipe": 1,
+      "product": 4,
+      "amount": 3.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 5,
+    "fields": {
+      "recipe": 2,
+      "product": 1,
+      "amount": 450.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 6,
+    "fields": {
+      "recipe": 2,
+      "product": 3,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 7,
+    "fields": {
+      "recipe": 2,
+      "product": 7,
+      "amount": 75.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 8,
+    "fields": {
+      "recipe": 2,
+      "product": 6,
+      "amount": 10.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 9,
+    "fields": {
+      "recipe": 2,
+      "product": 2,
+      "amount": 21.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 10,
+    "fields": {
+      "recipe": 2,
+      "product": 5,
+      "amount": 51.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 11,
+    "fields": {
+      "recipe": 3,
+      "product": 1,
+      "amount": 200.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 12,
+    "fields": {
+      "recipe": 3,
+      "product": 5,
+      "amount": 102.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 13,
+    "fields": {
+      "recipe": 3,
+      "product": 8,
+      "amount": 34.0
+    }
+  },
+  {
+    "model": "backend.Ingredient",
+    "pk": 14,
+    "fields": {
+      "recipe": 3,
+      "product": 9,
+      "amount": 6.0
+    }
+  },
+  {
+    "model": "backend.Serving",
+    "pk": 1,
+    "fields": {
+      "name": "mittelgroßes Ei",
+      "size": 51.0,
+      "product": 5
+    }
+  }
+]

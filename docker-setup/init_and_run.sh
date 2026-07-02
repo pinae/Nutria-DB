@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-cd /var/www
-python3 manage.py wait_for_db
-python3 manage.py migrate || { echo 'migrate failed' ; exit 1; }
-python3 manage.py collectstatic
-python3 manage.py initadmin
-python3 manage.py initial_data
-cd /home/docker
-/usr/local/bin/uwsgi --ini /etc/uwsgi/apps-enabled/uwsgi-app.ini
+set -e
+export PATH="/opt/venv/bin:$PATH"
+cd /app/nutriaDB
+python manage.py wait_for_db
+python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py initadmin
+python manage.py initial_data
+exec gunicorn nutriaDB.wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers "${GUNICORN_WORKERS:-4}" \
+    --access-logfile - \
+    --error-logfile -

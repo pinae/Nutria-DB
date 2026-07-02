@@ -1,4 +1,0 @@
-wheel
-django
-pyjwt
-requests

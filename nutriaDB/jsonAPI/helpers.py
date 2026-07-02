@@ -23,5 +23,5 @@ def convert_digits_to_bytes(digits):
         try:
             byte_string += conversion_table[digit]
         except KeyError:
-            raise NoDigitError(digit)
+            raise NoDigitError(digit) from None
     return byte_string

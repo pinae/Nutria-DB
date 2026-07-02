@@ -1,0 +1,29 @@
+[project]
+name = "nutria-db"
+version = "2.0.0"
+description = "Nutria food and recipe database with JSON and binary APIs"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.0,<6.1",
+    "pyjwt>=2.10",
+    "requests>=2.32",
+    "psycopg[binary]>=3.2",
+    "gunicorn>=23",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*" = ["E501"]

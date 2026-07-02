@@ -350,7 +350,7 @@ class UserTests(TestCase):
         self.assertEqual(user.last_name, "Mustermann")
         self.assertEqual(user.email, "max@mustermann.de")
         self.assertTrue(user.check_password("test1234"))
-        pl = jwt.decode(rc['token'], JWT_SECRET, 'HS256')
+        pl = jwt.decode(rc['token'], JWT_SECRET, algorithms=['HS256'])
         self.assertIn('id', pl)
         self.assertEqual(pl['email'], "max@mustermann.de")
 
@@ -364,7 +364,7 @@ class UserTests(TestCase):
         }), content_type='application/json')
         rc = json.loads(response.content)
         self.assertIn('token', rc)
-        pl = jwt.decode(rc['token'], JWT_SECRET, 'HS256')
+        pl = jwt.decode(rc['token'], JWT_SECRET, algorithms=['HS256'])
         self.assertIn('id', pl)
         self.assertEqual(u.pk, pl['id'])
         self.assertEqual(pl['email'], "max@mustermann.de")
@@ -599,3 +599,111 @@ class HelperTests(TestCase):
         self.assertEqual(b'\x00\x01\x02\x09', convert_digits_to_bytes("0129"))
         self.assertEqual(b'', convert_digits_to_bytes(""))
         self.assertRaises(NoDigitError, convert_digits_to_bytes, "01a")
+
+
+class RegressionTests(TestCase):
+    """Tests for bugs fixed during the Django 6 modernization."""
+    fixtures = ['broetchen.json']
+
+    def createUserAndGetToken(self):
+        u = User(username="maxm", first_name="Max", last_name="Mustermann", email="max@mustermann.de")
+        u.set_password("test1234")
+        u.save()
+        response = self.client.post('/json/login', data=json.dumps({
+            "username": "maxm",
+            "password": "test1234"
+        }), content_type='application/json')
+        return json.loads(response.content)['token']
+
+    def testRegistrationRejectsInvalidUsername(self):
+        # The validation error responses in register() were built but never
+        # returned, so invalid data used to be accepted.
+        response = self.client.post('/json/register', data=json.dumps({
+            "username": "max mit leerzeichen!",
+            "first_name": "Max",
+            "last_name": "Mustermann",
+            "email": "max@mustermann.de",
+            "password": "test1234"
+        }), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', json.loads(response.content))
+        self.assertEqual(User.objects.filter(first_name="Max").count(), 0)
+
+    def testRegistrationRejectsDuplicateUsername(self):
+        # Used to raise an unhandled IntegrityError (HTTP 500).
+        for _ in range(2):
+            response = self.client.post('/json/register', data=json.dumps({
+                "username": "maxm",
+                "first_name": "Max",
+                "last_name": "Mustermann",
+                "email": "max@mustermann.de",
+                "password": "test1234"
+            }), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', json.loads(response.content))
+
+    def testDeleteRecipe(self):
+        # delete_food() used to check data['id'][1] instead of data['id'][0],
+        # so recipes could never be deleted through the API.
+        token = self.createUserAndGetToken()
+        user = User.objects.get(username="maxm")
+        recipe = Recipe.objects.get(name_addition="Weizenbrötchen")
+        recipe.author = user
+        recipe.save()
+        response = self.client.post('/json/delete', data=json.dumps({
+            "token": token,
+            "id": "1" + str(recipe.pk)
+        }), content_type='application/json')
+        self.assertIn('success', json.loads(response.content))
+        self.assertEqual(Recipe.objects.filter(name_addition="Weizenbrötchen").count(), 0)
+
+    def testDetailsUnknownIdReturnsJsonError(self):
+        # Used to raise IndexError (HTTP 500) because DoesNotExist was
+        # caught around a [0] index access.
+        response = self.client.get('/json/food/09999')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', json.loads(response.content))
+
+    def testDetailsAuthorName(self):
+        # The author name used to concatenate first_name twice.
+        token = self.createUserAndGetToken()
+        self.client.post('/json/save', data=json.dumps({
+            "token": token,
+            "food": {"name": "Mehl: Autorentest", "reference_amount": 100, "calories": 348}
+        }), content_type='application/json')
+        p = Product.objects.get(name_addition="Autorentest")
+        response = self.client.get('/json/food/0' + str(p.pk))
+        self.assertEqual(json.loads(response.content)['author'], "Max Mustermann")
+
+    def testQueryPagination(self):
+        # Chunked queries used to slice [start:count] instead of
+        # [start:start+count], returning empty pages.
+        response = self.client.get('/json/find?name=e&count=2')
+        rc = json.loads(response.content)
+        # The count applies per food type, so we get 2 products and the
+        # matching recipes.
+        products = [f for f in rc['food'] if f[0].startswith('0')]
+        self.assertEqual(len(products), 2)
+        next_product_chunk = rc['chunk'].split(':')[0]
+        self.assertEqual(next_product_chunk, '2')
+        response = self.client.get('/json/find?name=e&count=2&chunk=' + rc['chunk'])
+        rc2 = json.loads(response.content)
+        self.assertGreaterEqual(len(rc2['food']), 1)
+        first_ids = {f[0] for f in rc['food']}
+        second_ids = {f[0] for f in rc2['food']}
+        self.assertFalse(first_ids & second_ids)
+
+    def testSaveAndQueryEan(self):
+        # Stored EANs used to be rendered with an off-by-48 byte offset.
+        token = self.createUserAndGetToken()
+        self.client.post('/json/save', data=json.dumps({
+            "token": token,
+            "food": {"name": "Mehl: EAN-Test", "reference_amount": 100,
+                     "calories": 348, "ean": "4012345678901"}
+        }), content_type='application/json')
+        response = self.client.get('/json/find?ean=4012345678901')
+        rc = json.loads(response.content)
+        self.assertEqual(len(rc['food']), 1)
+        self.assertEqual(rc['food'][0][1], "Mehl: EAN-Test")
+        details = json.loads(self.client.get('/json/food/' + rc['food'][0][0]).content)
+        self.assertEqual(details['ean'], "4012345678901")

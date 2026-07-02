@@ -1,9 +1,24 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+from django.utils import timezone
+
+#: All optional nutrient fields shared by Product (as real columns) and
+#: Recipe/Ingredient (as computed properties). Values are stored per
+#: reference amount; units are documented on the Product fields.
+NUTRIENT_FIELDS = [
+    'total_fat', 'saturated_fat', 'cholesterol', 'protein', 'total_carbs',
+    'sugar', 'dietary_fiber', 'salt', 'sodium', 'potassium', 'copper',
+    'iron', 'magnesium', 'manganese', 'zinc', 'phosphorous', 'sulphur',
+    'chloro', 'fluoric', 'vitamin_b1', 'vitamin_b12', 'vitamin_b6',
+    'vitamin_c', 'vitamin_d', 'vitamin_e',
+]
 
 
 class Category(models.Model):
     name = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name_plural = 'categories'
 
     def __str__(self):
         return str(self.name)
@@ -20,7 +35,7 @@ class Food(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name_addition = models.CharField(max_length=256)
-    creation_date = models.DateTimeField(auto_now=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         abstract = True
@@ -41,7 +56,7 @@ class Product(Food):
     saturated_fat = models.FloatField(
         null=True, help_text="Amount of saturated fat in g in the reference amount.")  # gesättigte Fettsäure
     cholesterol = models.FloatField(
-        null=True, help_text="Amount of choleserol in mg in the reference amount.")    # Cholesterin
+        null=True, help_text="Amount of cholesterol in mg in the reference amount.")   # Cholesterin
     protein = models.FloatField(
         null=True, help_text="Amount of protein in g in the reference amount.")        # Eiweiß
     total_carbs = models.FloatField(
@@ -90,10 +105,17 @@ class Product(Food):
 
 
 class Recipe(Food):
+    """
+    A recipe aggregates its Ingredients. All nutrient values as well as
+    ``calories`` and ``reference_amount`` are computed from the ingredients;
+    the setters scale all ingredient amounts proportionally so that the
+    recipe reaches the requested value.
+    """
+
     def adjust_ingredient_amounts(self, old_value, new_value):
         for i in Ingredient.objects.filter(recipe=self):
-            if old_value is not None:
-                i.amount = i.amount/old_value*new_value
+            if old_value:
+                i.amount = i.amount / old_value * new_value
                 i.save()
 
     def get_ingredients(self):
@@ -101,7 +123,7 @@ class Recipe(Food):
 
     @property
     def reference_amount(self):
-        return sum([i.amount for i in self.get_ingredients()])
+        return sum(i.amount for i in self.get_ingredients())
 
     @reference_amount.setter
     def reference_amount(self, new_amount):
@@ -109,286 +131,30 @@ class Recipe(Food):
 
     @property
     def calories(self):
-        return sum([i.calories for i in self.get_ingredients()])
+        return sum(i.calories for i in self.get_ingredients())
 
     @calories.setter
     def calories(self, new_calories_count):
         self.adjust_ingredient_amounts(self.calories, new_calories_count)
 
-    @property
-    def total_fat(self):
+
+def _recipe_nutrient_property(name):
+    def getter(self):
         try:
-            return sum([i.total_fat for i in self.get_ingredients()])
+            return sum(getattr(i, name) for i in self.get_ingredients())
         except TypeError:
+            # At least one ingredient has no value for this nutrient.
             return None
 
-    @total_fat.setter
-    def total_fat(self, new_total_fat_amount):
-        self.adjust_ingredient_amounts(self.total_fat, new_total_fat_amount)
+    def setter(self, new_value):
+        self.adjust_ingredient_amounts(getattr(self, name), new_value)
 
-    @property
-    def saturated_fat(self):
-        try:
-            return sum([i.saturated_fat for i in self.get_ingredients()])
-        except TypeError:
-            return None
+    getter.__name__ = name
+    return property(getter, setter, doc=f"Sum of {name} over all ingredients (None if unknown).")
 
-    @saturated_fat.setter
-    def saturated_fat(self, new_saturated_fat_amount):
-        self.adjust_ingredient_amounts(self.saturated_fat, new_saturated_fat_amount)
 
-    @property
-    def cholesterol(self):
-        try:
-            return sum([i.cholesterol for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @cholesterol.setter
-    def cholesterol(self, new_cholesterol_value):
-        self.adjust_ingredient_amounts(self.cholesterol, new_cholesterol_value)
-
-    @property
-    def protein(self):
-        try:
-            return sum([i.protein for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @protein.setter
-    def protein(self, new_protein_value):
-        self.adjust_ingredient_amounts(self.protein, new_protein_value)
-
-    @property
-    def total_carbs(self):
-        try:
-            return sum([i.total_carbs for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @total_carbs.setter
-    def total_carbs(self, new_total_carbs_value):
-        self.adjust_ingredient_amounts(self.total_carbs, new_total_carbs_value)
-
-    @property
-    def sugar(self):
-        try:
-            return sum([i.sugar for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @sugar.setter
-    def sugar(self, new_sugar_value):
-        self.adjust_ingredient_amounts(self.sugar, new_sugar_value)
-
-    @property
-    def dietary_fiber(self):
-        try:
-            return sum([i.dietary_fiber for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @dietary_fiber.setter
-    def dietary_fiber(self, new_dietary_fiber_value):
-        self.adjust_ingredient_amounts(self.dietary_fiber, new_dietary_fiber_value)
-
-    @property
-    def salt(self):
-        try:
-            return sum([i.salt for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @salt.setter
-    def salt(self, new_salt_value):
-        self.adjust_ingredient_amounts(self.salt, new_salt_value)
-
-    @property
-    def sodium(self):
-        try:
-            return sum([i.sodium for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @sodium.setter
-    def sodium(self, new_sodium_value):
-        self.adjust_ingredient_amounts(self.sodium, new_sodium_value)
-
-    @property
-    def potassium(self):
-        try:
-            return sum([i.potassium for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @potassium.setter
-    def potassium(self, new_potassium_value):
-        self.adjust_ingredient_amounts(self.potassium, new_potassium_value)
-
-    @property
-    def copper(self):
-        try:
-            return sum([i.copper for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @copper.setter
-    def copper(self, new_copper_value):
-        self.adjust_ingredient_amounts(self.copper, new_copper_value)
-
-    @property
-    def iron(self):
-        try:
-            return sum([i.iron for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @iron.setter
-    def iron(self, new_iron_value):
-        self.adjust_ingredient_amounts(self.iron, new_iron_value)
-
-    @property
-    def magnesium(self):
-        try:
-            return sum([i.magnesium for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @magnesium.setter
-    def magnesium(self, new_magnesium_value):
-        self.adjust_ingredient_amounts(self.magnesium, new_magnesium_value)
-
-    @property
-    def manganese(self):
-        try:
-            return sum([i.manganese for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @manganese.setter
-    def manganese(self, new_manganese_value):
-        self.adjust_ingredient_amounts(self.manganese, new_manganese_value)
-
-    @property
-    def zinc(self):
-        try:
-            return sum([i.zinc for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @zinc.setter
-    def zinc(self, new_zinc_value):
-        self.adjust_ingredient_amounts(self.zinc, new_zinc_value)
-
-    @property
-    def phosphorous(self):
-        try:
-            return sum([i.phosphorous for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @phosphorous.setter
-    def phosphorous(self, new_phosphorous_value):
-        self.adjust_ingredient_amounts(self.phosphorous, new_phosphorous_value)
-
-    @property
-    def sulphur(self):
-        try:
-            return sum([i.sulphur for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @sulphur.setter
-    def sulphur(self, new_sulphur_value):
-        self.adjust_ingredient_amounts(self.sulphur, new_sulphur_value)
-
-    @property
-    def chloro(self):
-        try:
-            return sum([i.chloro for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @chloro.setter
-    def chloro(self, new_chloro_value):
-        self.adjust_ingredient_amounts(self.chloro, new_chloro_value)
-
-    @property
-    def fluoric(self):
-        try:
-            return sum([i.fluoric for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @fluoric.setter
-    def fluoric(self, new_fluoric_value):
-        self.adjust_ingredient_amounts(self.fluoric, new_fluoric_value)
-
-    @property
-    def vitamin_b1(self):
-        try:
-            return sum([i.vitamin_b1 for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_b1.setter
-    def vitamin_b1(self, new_vitamin_b1_value):
-        self.adjust_ingredient_amounts(self.vitamin_b1, new_vitamin_b1_value)
-
-    @property
-    def vitamin_b12(self):
-        try:
-            return sum([i.vitamin_b12 for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_b12.setter
-    def vitamin_b12(self, new_vitamin_b12_value):
-        self.adjust_ingredient_amounts(self.vitamin_b12, new_vitamin_b12_value)
-
-    @property
-    def vitamin_b6(self):
-        try:
-            return sum([i.vitamin_b6 for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_b6.setter
-    def vitamin_b6(self, new_vitamin_b6_value):
-        self.adjust_ingredient_amounts(self.vitamin_b6, new_vitamin_b6_value)
-
-    @property
-    def vitamin_c(self):
-        try:
-            return sum([i.vitamin_c for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_c.setter
-    def vitamin_c(self, new_vitamin_c_value):
-        self.adjust_ingredient_amounts(self.vitamin_c, new_vitamin_c_value)
-
-    @property
-    def vitamin_d(self):
-        try:
-            return sum([i.vitamin_d for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_d.setter
-    def vitamin_d(self, new_vitamin_d_value):
-        self.adjust_ingredient_amounts(self.vitamin_d, new_vitamin_d_value)
-
-    @property
-    def vitamin_e(self):
-        try:
-            return sum([i.vitamin_e for i in self.get_ingredients()])
-        except TypeError:
-            return None
-
-    @vitamin_e.setter
-    def vitamin_e(self, new_vitamin_e_value):
-        self.adjust_ingredient_amounts(self.vitamin_e, new_vitamin_e_value)
+for _name in NUTRIENT_FIELDS:
+    setattr(Recipe, _name, _recipe_nutrient_property(_name))
 
 
 class NoFoodException(Exception):
@@ -435,230 +201,23 @@ class Ingredient(models.Model):
     def calories(self, new_calories_count):
         self.amount = self.amount / self.calories * new_calories_count
 
-    @property
-    def total_fat(self):
-        return self.scale_to_amount(self.food.total_fat)
 
-    @total_fat.setter
-    def total_fat(self, new_total_fat_amount):
-        if self.total_fat is not None:
-            self.amount = self.amount / self.total_fat * new_total_fat_amount
+def _ingredient_nutrient_property(name):
+    def getter(self):
+        return self.scale_to_amount(getattr(self.food, name))
 
-    @property
-    def saturated_fat(self):
-        return self.scale_to_amount(self.food.saturated_fat)
+    def setter(self, new_value):
+        current = getter(self)
+        if current is not None:
+            self.amount = self.amount / current * new_value
 
-    @saturated_fat.setter
-    def saturated_fat(self, new_saturated_fat_amount):
-        if self.saturated_fat is not None:
-            self.amount = self.amount / self.saturated_fat * new_saturated_fat_amount
+    getter.__name__ = name
+    return property(getter, setter,
+                    doc=f"{name} contained in this ingredient's amount (None if unknown for the food).")
 
-    @property
-    def cholesterol(self):
-        return self.scale_to_amount(self.food.cholesterol)
 
-    @cholesterol.setter
-    def cholesterol(self, new_cholesterol_value):
-        if self.cholesterol is not None:
-            self.amount = self.amount / self.cholesterol * new_cholesterol_value
-
-    @property
-    def protein(self):
-        return self.scale_to_amount(self.food.protein)
-
-    @protein.setter
-    def protein(self, new_protein_value):
-        if self.protein is not None:
-            self.amount = self.amount / self.protein * new_protein_value
-
-    @property
-    def total_carbs(self):
-        return self.scale_to_amount(self.food.total_carbs)
-
-    @total_carbs.setter
-    def total_carbs(self, new_total_carbs_value):
-        if self.total_carbs is not None:
-            self.amount = self.amount / self.total_carbs * new_total_carbs_value
-
-    @property
-    def sugar(self):
-        return self.scale_to_amount(self.food.sugar)
-
-    @sugar.setter
-    def sugar(self, new_sugar_value):
-        if self.sugar is not None:
-            self.amount = self.amount / self.sugar * new_sugar_value
-
-    @property
-    def dietary_fiber(self):
-        return self.scale_to_amount(self.food.dietary_fiber)
-
-    @dietary_fiber.setter
-    def dietary_fiber(self, new_dietary_fiber_value):
-        if self.dietary_fiber is not None:
-            self.amount = self.amount / self.dietary_fiber * new_dietary_fiber_value
-
-    @property
-    def salt(self):
-        return self.scale_to_amount(self.food.salt)
-
-    @salt.setter
-    def salt(self, new_salt_value):
-        if self.salt is not None:
-            self.amount = self.amount / self.salt * new_salt_value
-
-    @property
-    def sodium(self):
-        return self.scale_to_amount(self.food.sodium)
-
-    @sodium.setter
-    def sodium(self, new_sodium_value):
-        if self.sodium is not None:
-            self.amount = self.amount / self.sodium * new_sodium_value
-
-    @property
-    def potassium(self):
-        return self.scale_to_amount(self.food.potassium)
-
-    @potassium.setter
-    def potassium(self, new_potassium_value):
-        if self.potassium is not None:
-            self.amount = self.amount / self.potassium * new_potassium_value
-
-    @property
-    def copper(self):
-        return self.scale_to_amount(self.food.copper)
-
-    @copper.setter
-    def copper(self, new_copper_value):
-        if self.copper is not None:
-            self.amount = self.amount / self.copper * new_copper_value
-
-    @property
-    def iron(self):
-        return self.scale_to_amount(self.food.iron)
-
-    @iron.setter
-    def iron(self, new_iron_value):
-        if self.iron is not None:
-            self.amount = self.amount / self.iron * new_iron_value
-
-    @property
-    def magnesium(self):
-        return self.scale_to_amount(self.food.magnesium)
-
-    @magnesium.setter
-    def magnesium(self, new_magnesium_value):
-        if self.magnesium is not None:
-            self.amount = self.amount / self.iron * new_magnesium_value
-
-    @property
-    def manganese(self):
-        return self.scale_to_amount(self.food.manganese)
-
-    @manganese.setter
-    def manganese(self, new_manganese_value):
-        if self.manganese is not None:
-            self.amount = self.amount / self.manganese * new_manganese_value
-
-    @property
-    def zinc(self):
-        return self.scale_to_amount(self.food.zinc)
-
-    @zinc.setter
-    def zinc(self, new_zinc_value):
-        if self.zinc is not None:
-            self.amount = self.amount / self.zinc * new_zinc_value
-
-    @property
-    def phosphorous(self):
-        return self.scale_to_amount(self.food.phosphorous)
-
-    @phosphorous.setter
-    def phosphorous(self, new_phosphorous_value):
-        if self.phosphorous is not None:
-            self.amount = self.amount / self.phosphorous * new_phosphorous_value
-
-    @property
-    def sulphur(self):
-        return self.scale_to_amount(self.food.sulphur)
-
-    @sulphur.setter
-    def sulphur(self, new_sulphur_value):
-        if self.sulphur is not None:
-            self.amount = self.amount / self.sulphur * new_sulphur_value
-
-    @property
-    def chloro(self):
-        return self.scale_to_amount(self.food.chloro)
-
-    @chloro.setter
-    def chloro(self, new_chloro_value):
-        if self.chloro is not None:
-            self.amount = self.amount / self.chloro * new_chloro_value
-
-    @property
-    def fluoric(self):
-        return self.scale_to_amount(self.food.fluoric)
-
-    @fluoric.setter
-    def fluoric(self, new_fluoric_value):
-        if self.fluoric is not None:
-            self.amount = self.amount / self.fluoric * new_fluoric_value
-
-    @property
-    def vitamin_b1(self):
-        return self.scale_to_amount(self.food.vitamin_b1)
-
-    @vitamin_b1.setter
-    def vitamin_b1(self, new_vitamin_b1_value):
-        if self.vitamin_b1 is not None:
-            self.amount = self.amount / self.vitamin_b1 * new_vitamin_b1_value
-
-    @property
-    def vitamin_b12(self):
-        return self.scale_to_amount(self.food.vitamin_b12)
-
-    @vitamin_b12.setter
-    def vitamin_b12(self, new_vitamin_b12_value):
-        if self.vitamin_b12 is not None:
-            self.amount = self.amount / self.vitamin_b12 * new_vitamin_b12_value
-
-    @property
-    def vitamin_b6(self):
-        return self.scale_to_amount(self.food.vitamin_b6)
-
-    @vitamin_b6.setter
-    def vitamin_b6(self, new_vitamin_b6_value):
-        if self.vitamin_b6 is not None:
-            self.amount = self.amount / self.vitamin_b6 * new_vitamin_b6_value
-
-    @property
-    def vitamin_c(self):
-        return self.scale_to_amount(self.food.vitamin_c)
-
-    @vitamin_c.setter
-    def vitamin_c(self, new_vitamin_c_value):
-        if self.vitamin_c is not None:
-            self.amount = self.amount / self.vitamin_c * new_vitamin_c_value
-
-    @property
-    def vitamin_d(self):
-        return self.scale_to_amount(self.food.vitamin_d)
-
-    @vitamin_d.setter
-    def vitamin_d(self, new_vitamin_d_value):
-        if self.vitamin_d is not None:
-            self.amount = self.amount / self.vitamin_d * new_vitamin_d_value
-
-    @property
-    def vitamin_e(self):
-        return self.scale_to_amount(self.food.vitamin_e)
-
-    @vitamin_e.setter
-    def vitamin_e(self, new_vitamin_e_value):
-        if self.vitamin_e is not None:
-            self.amount = self.amount / self.vitamin_e * new_vitamin_e_value
+for _name in NUTRIENT_FIELDS:
+    setattr(Ingredient, _name, _ingredient_nutrient_property(_name))
 
 
 class Serving(models.Model):
@@ -669,6 +228,9 @@ class Serving(models.Model):
                                        related_name='servings')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, default=None,
                                 related_name='servings')
+
+    def __str__(self):
+        return str(self.name) + ' (' + str(self.size) + 'g) of ' + str(self.food)
 
     @property
     def food(self):
